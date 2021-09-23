@@ -16,25 +16,25 @@ const loginUsuario = async(req, res = response) => {
 
     const { correo, contrasenia } = req.body;
     try {
-        const usuarioBD = await Usuario.findOne({ correo, tipoUsuario: 1 });
-        if (!usuarioBD) {
+        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
+        if (!usuario) {
             return res.status(404).json({
                 ok: false,
                 msg: "Correo no encontrado"
             });
         }
-        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuarioBD.contrasenia);
+        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuario.contrasenia);
         if (!validarContrasenia) {
             return res.status(500).json({
                 ok: false,
                 msg: "Contrasenia no coincide"
             });
         }
-        const token = await generarJWT(usuarioBD.id);
+        const token = await generarJWT(usuario.id);
 
         res.json({
             ok: true,
-            usuarioBD,
+            usuario,
             token
         });
 
@@ -54,24 +54,24 @@ const loginAdmin = async(req, res = response) => {
 
     const { correo, contrasenia } = req.body;
     try {
-        const usuarioBD = await Usuario.findOne({ correo, tipoUsuario: 0 });
-        if (!usuarioBD) {
+        const usuario = await Usuario.findOne({ correo, tipoUsuario: 0 });
+        if (!usuario) {
             return res.status(404).json({
                 ok: false,
                 msg: "Correo no encontrado"
             });
         }
-        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuarioBD.contrasenia);
+        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuario.contrasenia);
         if (!validarContrasenia) {
             return res.status(500).json({
                 ok: false,
                 msg: "Contrasenia no coincide"
             });
         }
-        const token = await generarJWT(usuarioBD.id);
+        const token = await generarJWT(usuario.id);
         res.json({
             ok: true,
-            usuarioBD,
+            usuario,
             token
         });
 
