@@ -14,7 +14,8 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 
 const loginUsuario = async(req, res = response) => {
 
-    const { correo, contrasenia } = req.body;
+
+    const { correo, contrasenia } = req.params;
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
         if (!usuario) {

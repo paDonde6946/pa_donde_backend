@@ -12,7 +12,7 @@ const { loginUsuario, loginAdmin } = require('../controladores/ingreso_controlad
 const router = Router();
 
 
-router.get('/usuario', [
+router.get('/usuario/:correo/:contrasenia', [
     check('correo', 'El correo es obligatorio').isEmail(),
     check('contrasenia', 'La clave es obligatoria').not().isEmpty(),
     validarCampos
