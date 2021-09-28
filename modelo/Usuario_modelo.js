@@ -16,8 +16,21 @@ const Usuario = Schema({
     },
     tipoUsuario: {
         type: Number,
+        default: 1,
         require: true
-    }
+    },
+    nombre: {
+        type: String,
+        require: true
+    },
+    apellido: {
+        type: String,
+        require: true
+    },
+    ceulular: {
+        type: Number,
+        require: true
+    },
 }, {
     timestamps: true
 });
