@@ -18,7 +18,7 @@ router.get('/usuario/:correo/:contrasenia', [
     validarCampos
 ], loginUsuario);
 
-router.get('/admin', [
+router.get('/admin/:correo/:contrasenia', [
     check('correo', 'El correo es obligatorio').isEmail(),
     check('contrasenia', 'La clave es obligatoria').not().isEmpty(),
     validarCampos

@@ -50,7 +50,12 @@ const loginUsuario = async(req, res = response) => {
 }
 
 
-
+/**
+ * 
+ * @param {*} req Request de los datos necsarios para ingresar al sistema
+ * @param {*} res Respons 
+ * @returns 
+ */
 const loginAdmin = async(req, res = response) => {
 
     const { correo, contrasenia } = req.body;
