@@ -31,6 +31,11 @@ const Usuario = Schema({
         type: Number,
         require: true
     },
+    estado: {
+        type: Number,
+        require: true,
+        default: 1
+    }
 }, {
     timestamps: true
 });

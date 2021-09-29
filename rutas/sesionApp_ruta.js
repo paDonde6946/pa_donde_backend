@@ -6,13 +6,14 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { loginUsuario, loginAdmin, registrarUsuario } = require('../controladores/ingreso_controlador');
+const { loginUsuario, loginAdmin } = require('../controladores/ingreso_controlador');
+const { crearUsuario } = require('../controladores/usuario_controlador');
 
 
 const router = Router();
 
 
-router.get('/usuario/:correo/:contrasenia', [
+router.get('/usuario/traerUsuario/:correo/:contrasenia', [
     check('correo', 'El correo es obligatorio').isEmail(),
     check('contrasenia', 'La clave es obligatoria').not().isEmpty(),
     validarCampos
@@ -31,6 +32,6 @@ router.put('/usuario/registrar', [
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty(),
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
     validarCampos,
-], registrarUsuario)
+], crearUsuario)
 
 module.exports = router;

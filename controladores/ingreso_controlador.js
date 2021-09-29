@@ -91,50 +91,8 @@ const loginAdmin = async(req, res = response) => {
     }
 }
 
-const registrarUsuario = async(req, res = response) => {
-
-    const { correo, contrasenia } = req.body;
-
-    console.log(req.body);
-    try {
-        const existeCorreo = await Usuario.findOne({ correo });
-
-        if (existeCorreo) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El correo ya esta registrado'
-            });
-        }
-
-        const usuario = new Usuario(req.body);
-
-        // Cifrado de contrasenia
-        const salt = Cifrar.genSaltSync();
-
-        usuario.contrasenia = Cifrar.hashSync(contrasenia.toString(), salt);
-
-        await usuario.save();
-
-        const token = await generarJWT(usuario.id);
-
-        res.json({
-            ok: true,
-            usuario,
-            token
-        });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el admin'
-        })
-    }
-
-}
 
 module.exports = {
     loginUsuario,
-    loginAdmin,
-    registrarUsuario
+    loginAdmin
 };

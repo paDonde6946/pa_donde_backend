@@ -30,11 +30,21 @@ app.use(express.static(publicoPath));
 
 
 // Rutas Movil 
-app.use('/app/login', require('./rutas/sesionApp_ruta'));
+app.use('/app/login', require('./rutas/SesionApp_ruta'));
 
 
 // Ruta Web
-app.use('/web/login', require('./rutas/sesionApp_ruta'));
+app.use('/web/login', require('./rutas/SesionApp_ruta'));
+
+
+// Ruta Usuiario Movil 
+app.use('/app/usuario', require('./rutas/Usuario_rutas'));
+
+// // Ruta Usuiario Web
+// app.use('/web/usuario', require('./rutas/Usuario_rutas'));
+
+
+
 
 servidor.listen(process.env.PORT, (err) => {
     if (err) throw new Error(err);
