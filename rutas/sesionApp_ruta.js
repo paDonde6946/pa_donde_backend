@@ -31,7 +31,6 @@ router.put('/usuario/registrar', [
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty(),
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmail(),
     validarCampos,
-    validarJWT
 ], registrarUsuario)
 
 module.exports = router;
