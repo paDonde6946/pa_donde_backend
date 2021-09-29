@@ -27,7 +27,7 @@ const Usuario = Schema({
         type: String,
         require: true
     },
-    ceulular: {
+    celular: {
         type: Number,
         require: true
     },

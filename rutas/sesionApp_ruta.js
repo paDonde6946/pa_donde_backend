@@ -27,7 +27,7 @@ router.get('/admin', [
 router.put('/usuario/registrar', [
     check('nombre', 'El nombre es obligatorio y solo se acepta texo').isString().not().isEmpty(),
     check('apellido', 'El apellido es obligatorio y solo se acepta texo').isString().not().isEmpty(),
-    check('ceulular', 'El ceulular es obligatorio').isNumeric().not().isEmpty(),
+    check('celular', 'El celular es obligatorio').isNumeric().not().isEmpty(),
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty(),
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmail(),
     validarCampos,
