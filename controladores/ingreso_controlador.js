@@ -59,6 +59,8 @@ const loginUsuario = async(req, res = response) => {
 const loginAdmin = async(req, res = response) => {
 
     const { correo, contrasenia } = req.query;
+
+    console.log(cooreo);
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 0 });
         if (!usuario) {

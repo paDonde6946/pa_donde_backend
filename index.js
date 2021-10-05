@@ -38,7 +38,7 @@ app.use('/web/login', require('./rutas/SesionApp_ruta'));
 
 
 // Ruta Usuiario Movil 
-app.use('/app/usuario', require('./rutas/Usuario_rutas'));
+app.use('/web/usuario', require('./rutas/Usuario_rutas'));
 
 // // Ruta Usuiario Web
 // app.use('/web/usuario', require('./rutas/Usuario_rutas'));
