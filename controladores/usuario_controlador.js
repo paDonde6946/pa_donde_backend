@@ -160,10 +160,33 @@ const cambiarEstadoUsuario = async(req, res = response) => {
     }
 }
 
+
+/**
+ * 
+ * @param {*} req Request con uid del partner
+ * @param {*} res Respons del partner y el nuevo token
+ */
+const renovarToken = async(req, res = response) => {
+
+    const uid = req.uid;
+
+    const token = await generarJWT(uid);
+
+    const usuario = await Usuario.findById(uid);
+
+    res.json({
+        ok: true,
+        usuario,
+        token
+    });
+
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
     traerTodosUsuarios,
     actualizarUsuario,
-    cambiarEstadoUsuario
+    cambiarEstadoUsuario,
+    renovarToken
 }

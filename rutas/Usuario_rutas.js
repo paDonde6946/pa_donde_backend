@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario } = require('../controladores/usuario_controlador');
+const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken } = require('../controladores/usuario_controlador');
 
 
 const router = Router();
@@ -37,6 +37,9 @@ router.post('/actualizarUsuario', [
     check('celular', 'El celular es obligatorio').notEmpty(),
     validarCampos,
     validarJWT
-], actualizarUsuario)
+], actualizarUsuario);
+
+router.get('/renovarToken', validarJWT, renovarToken);
+
 
 module.exports = router;
