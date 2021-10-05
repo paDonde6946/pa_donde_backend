@@ -16,6 +16,11 @@ const loginUsuario = async(req, res = response) => {
 
 
     const { correo, contrasenia } = req.params;
+    console.log(req.params);
+    // if(correo == null){
+
+    // }
+
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
         if (!usuario) {
@@ -60,7 +65,7 @@ const loginAdmin = async(req, res = response) => {
 
     const { correo, contrasenia } = req.query;
 
-    console.log(cooreo);
+    console.log(correo);
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 0 });
         if (!usuario) {

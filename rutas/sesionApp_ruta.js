@@ -13,7 +13,7 @@ const { crearUsuario } = require('../controladores/usuario_controlador');
 const router = Router();
 
 
-router.get('/usuario/traerUsuario/:correo/:contrasenia', [
+router.get('/usuario/:correo/:contrasenia', [
     check('correo', 'El correo es obligatorio').isEmail(),
     check('contrasenia', 'La clave es obligatoria').not().isEmpty(),
     validarCampos
