@@ -12,24 +12,24 @@ const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuar
 const router = Router();
 
 
-router.get('/traerUsuario/:uid', [
+router.get('/usuario/traerUsuario/:uid', [
     check('uid', 'El uid es obligatorio').not().isEmpty(),
     validarCampos,
     validarJWT
 ], buscarUsuario);
 
-router.post('/cambiarEstadoUsuario', [
+router.post('/usuario/cambiarEstadoUsuario', [
     check('uid', 'El uid es obligatorio').not().isEmpty(),
     validarCampos,
     validarJWT
 ], cambiarEstadoUsuario);
 
-router.get('/listaUsuarios', [
+router.get('/usuario/listaUsuarios', [
     validarCampos,
     validarJWT
 ], traerTodosUsuarios);
 
-router.post('/actualizarUsuario', [
+router.post('/usuario/actualizarUsuario', [
     check('uid', 'El uid es obligatorio').notEmpty(),
     check('correo', 'El correo es obligatorio').notEmpty().isEmail(),
     check('nombre', 'El nombre es obligatorio').notEmpty(),
@@ -39,7 +39,6 @@ router.post('/actualizarUsuario', [
     validarJWT
 ], actualizarUsuario);
 
-router.get('/renovarToken', validarJWT, renovarToken);
 
 
 module.exports = router;

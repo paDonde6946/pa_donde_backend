@@ -7,6 +7,7 @@ const Usuario = require('../modelo/Usuario_modelo');
 
 // Importaciones de token
 const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
+const { cifrarTexto } = require("../ayudas/cifrado")
 
 
 const crearUsuario = async(req, res = response) => {
@@ -25,10 +26,7 @@ const crearUsuario = async(req, res = response) => {
 
         const usuario = new Usuario(req.body);
 
-        // Cifrado de contrasenia
-        const salt = Cifrar.genSaltSync();
-
-        usuario.contrasenia = Cifrar.hashSync(contrasenia.toString(), salt);
+        usuario.contrasenia = cifrarTexto(contrasenia.toString());
 
         await usuario.save();
 
@@ -182,11 +180,41 @@ const renovarToken = async(req, res = response) => {
 
 }
 
+
+const cambiarContrasenia = async(req, res = response) => {
+    try {
+        const uid = req.uid;
+        const { contrasenia } = req.body;
+        const usuario = await Usuario.findById(uid);
+        console.log(uid);
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el usuario'
+            });
+        }
+        usuario.contrasenia = cifrarTexto(contrasenia);
+        usuario.cambiarContrasenia = 0;
+        usuario.save();
+        res.json({
+            ok: true
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
     traerTodosUsuarios,
     actualizarUsuario,
     cambiarEstadoUsuario,
-    renovarToken
+    renovarToken,
+    cambiarContrasenia
 }

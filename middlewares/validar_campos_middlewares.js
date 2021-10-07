@@ -22,6 +22,27 @@ const validarCampos = (req, res, next) => {
     next();
 }
 
+
+const validarCorreo = (req, res, next) => {
+
+    const { correo } = req.body;
+    if (correo == null) {
+        correo = req.query;
+    }
+    if (correo == null) {
+        correo = req.params;
+    }
+    console.log(correo);
+    if (!(/[a-z]@unbosque.edu.co/.test(correo)))
+        res.status(404).json({
+            ok: false,
+            msg: "Correo no apropiado"
+        });
+
+    next();
+}
+
 module.exports = {
-    validarCampos
+    validarCampos,
+    validarCorreo
 }

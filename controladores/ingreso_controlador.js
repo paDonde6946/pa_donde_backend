@@ -1,12 +1,14 @@
 const { response } = require('express');
-// Libreria para cifra
-const Cifrar = require('bcrypt');
 
 // Importaciones de modelo
 const Usuario = require('../modelo/Usuario_modelo');
 
 // Importaciones de token
 const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
+// Importacion de generador de contrasenia
+const generator = require('generate-password');
+const { cifrarTexto, compararCifrado } = require('../ayudas/cifrado');
+const { enviarOlvidoContrasenia } = require('../correos/correos');
 
 // Tipos de Usuario 
 // 0 -> admin 
@@ -14,12 +16,8 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 
 const loginUsuario = async(req, res = response) => {
 
-
     const { correo, contrasenia } = req.params;
     console.log(req.params);
-    // if(correo == null){
-
-    // }
 
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
@@ -29,7 +27,7 @@ const loginUsuario = async(req, res = response) => {
                 msg: "Correo no encontrado"
             });
         }
-        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuario.contrasenia);
+        const validarContrasenia = compararCifrado(contrasenia.toString(), usuario.contrasenia);
         if (!validarContrasenia) {
             return res.status(500).json({
                 ok: false,
@@ -65,7 +63,6 @@ const loginAdmin = async(req, res = response) => {
 
     const { correo, contrasenia } = req.query;
 
-    console.log(correo);
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 0 });
         if (!usuario) {
@@ -74,7 +71,7 @@ const loginAdmin = async(req, res = response) => {
                 msg: "Correo no encontrado"
             });
         }
-        const validarContrasenia = Cifrar.compareSync(contrasenia.toString(), usuario.contrasenia);
+        const validarContrasenia = compararCifrado(contrasenia.toString(), usuario.contrasenia);
         if (!validarContrasenia) {
             return res.status(500).json({
                 ok: false,
@@ -99,7 +96,49 @@ const loginAdmin = async(req, res = response) => {
 }
 
 
+
+/**
+ * 
+ * @param {*} req Correo elecctronico del cual se va a recuperar 
+ * @param {*} res Ok : false or true
+ */
+const olvidarContrasenia = async(req, res = response) => {
+    try {
+        const { correo } = req.body;
+        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
+
+        var password = generator.generate({
+            length: 10,
+            numbers: true
+        });
+        console.log(password);
+
+        usuario.contrasenia = cifrarTexto(password);
+        usuario.cambio_contrasenia = 1;
+        usuario.save();
+
+        if (!enviarOlvidoContrasenia(usuario.correo, password)) {
+            res.json({
+                ok: true
+            });
+        } else {
+            res.json({
+                ok: false
+            });
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            msg: "Hable con el admin"
+        });
+    }
+}
+
 module.exports = {
     loginUsuario,
-    loginAdmin
+    loginAdmin,
+    olvidarContrasenia
 };

@@ -35,6 +35,10 @@ const Usuario = Schema({
         type: Number,
         require: true,
         default: 1
+    },
+    cambio_contrasenia: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true
