@@ -41,15 +41,19 @@ const olvidoContrasenia = (clave) => {
         'border-style: solid;' +
         'box-shadow: 0px 0px 4px black;' +
         'border-radius: 8px;">' +
-        '    <div style="text-align-last: center;padding-inline: 10%;font-family: sans-serif;height: 90px;">' +
+        '    <div style="text-align-last: center;padding-inline: 10%;font-family: sans-serif; ">' +
         '        <div style="width: 100%; text-align-last: center; padding-top: 30px;">' +
-        '            <h2 style="color: #5D992C ;">' +
+        '            <h2 style="color: #5D992C ; ">' +
         '                Recuperacion de clave Pa Donde' +
         '            </h2>' +
+        '            ' +
         '        </div>' +
         '    </div>' +
         '    <hr class="new1">' +
-        '    <p style="padding-inline: 30px; padding-top:10px; text-align: justify;">' +
+        '    <div style="    opacity: .5;' +
+        '       background-image: url(https://ci5.googleusercontent.com/proxy/U5uLhdhucyfpOe-fQr71jIUTaIcV_uWyOtQvL_OxmDvw9tpctyFH8gFrZWbmLgesNpc=s0-d-e1-ft#https://i.imgur.com/cBtTuWE.png);' +
+        '       background-size: 50%;' +
+        '       background-repeat: no-repeat;"><p style="padding-inline: 30px; padding-top:10px; text-align: justify;">' +
         '        Hola! Nos enteramos que no te acuerdas de tu contraseña.' +
         '        <br><br>No te preocupues, estamos para servirte, por eso te asignamos una nueva, ingresa con ella y una vez adentro el sistema te pedira que la cambies.' +
         '        <br><br> Esta es tu nueva contraseña:' +
@@ -63,7 +67,7 @@ const olvidoContrasenia = (clave) => {
         clave +
         '            </h2>' +
         '        </div>' +
-        '    </center>' +
+        '    </center></div><br/><br/><br/><br/><br/>' +
         '</div></center>';
 }
 

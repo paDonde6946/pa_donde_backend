@@ -35,6 +35,12 @@ router.put('/usuario/registrar', [
     validarCampos,
 ], crearUsuario);
 
+
+router.post('/admin/olvidarContrasenia', [
+    check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
+    validarCampos,
+], olvidarContrasenia);
+
 router.post('/olvidarContrasenia', [
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
     validarCampos,

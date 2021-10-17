@@ -107,7 +107,7 @@ const actualizarUsuario = async(req, res = response) => {
 
         const usuario = await Usuario.findById(uid);
 
-        usuario.correo = correo;
+        usuario.correo = correo != null || correo != undefined ? correo : usuario.correo;
         usuario.nombre = nombre;
         usuario.apellido = apellido;
         usuario.celular = celular;
