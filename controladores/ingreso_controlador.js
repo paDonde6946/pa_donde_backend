@@ -105,6 +105,9 @@ const loginAdmin = async(req, res = response) => {
 const olvidarContrasenia = async(req, res = response) => {
     try {
         const { correo } = req.body;
+        if (correo == null || correo == undefined) {
+            const { correo } = req.params;
+        }
         const usuario = await Usuario.findOne({ correo });
 
         var password = generator.generate({

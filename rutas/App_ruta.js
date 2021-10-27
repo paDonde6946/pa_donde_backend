@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { cambiarContrasenia, actualizarUsuario } = require('../controladores/usuario_controlador');
+const { cambiarContrasenia, actualizarUsuario, agregarVehiculo } = require('../controladores/usuario_controlador');
 
 
 const router = Router();
@@ -25,6 +25,19 @@ router.post('/actualizarPerfil', [
     validarCampos,
     validarJWT
 ], actualizarUsuario);
+
+router.post('/agregarVehiculo', [
+    check('uid', 'El uid es obligatorio').notEmpty(),
+    check('placa', 'El placa es obligatorio').notEmpty(),
+    check('tipoVehiculo', 'El tipoVehiculo es obligatorio').notEmpty().isNumeric(),
+    check('color', 'El color es obligatorio').notEmpty().isString(),
+    check('marca', 'El marca es obligatorio').notEmpty().isString(),
+    check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
+    check('modelo', 'El modelo es obligatorio').notEmpty().isString(),
+    check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
+    validarCampos,
+    validarJWT
+], agregarVehiculo)
 
 
 

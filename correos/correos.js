@@ -50,10 +50,7 @@ const olvidoContrasenia = (clave) => {
         '        </div>' +
         '    </div>' +
         '    <hr class="new1">' +
-        '    <div style="    opacity: .5;' +
-        '       background-image: url(https://ci5.googleusercontent.com/proxy/U5uLhdhucyfpOe-fQr71jIUTaIcV_uWyOtQvL_OxmDvw9tpctyFH8gFrZWbmLgesNpc=s0-d-e1-ft#https://i.imgur.com/cBtTuWE.png);' +
-        '       background-size: 50%;' +
-        '       background-repeat: no-repeat;"><p style="padding-inline: 30px; padding-top:10px; text-align: justify;">' +
+        '    <div><p style="padding-inline: 30px; padding-top:10px; text-align: justify;">' +
         '        Hola! Nos enteramos que no te acuerdas de tu contraseña.' +
         '        <br><br>No te preocupues, estamos para servirte, por eso te asignamos una nueva, ingresa con ella y una vez adentro el sistema te pedira que la cambies.' +
         '        <br><br> Esta es tu nueva contraseña:' +

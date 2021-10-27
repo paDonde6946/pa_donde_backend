@@ -3,35 +3,31 @@ const { compareSync } = require("bcrypt");
 
 const { Schema, model } = require('mongoose');
 
-const Usuario = Schema({
+const Vehiculo = Schema({
 
-    correo: {
+    placa: {
         type: String,
         require: true,
         unique: true
     },
-    contrasenia: {
-        type: String,
-        require: true
-    },
-    tipoUsuario: {
+    tipoVehiculo: {
         type: Number,
         default: 1,
         require: true
     },
-    nombre: {
+    color: {
         type: String,
         require: true
     },
-    apellido: {
+    marca: {
         type: String,
         require: true
     },
-    cedula: {
-        type: Number,
+    anio: {
+        type: String,
         require: true
     },
-    celular: {
+    modelo: {
         type: Number,
         require: true
     },
@@ -39,24 +35,17 @@ const Usuario = Schema({
         type: Number,
         require: true,
         default: 1
-    },
-    cambio_contrasenia: {
-        type: Number,
-        default: 0
-    },
-    vehiculos: [{
-        type: Schema.Types.ObjectId
-    }]
+    }
 }, {
     timestamps: true
 });
 
-Usuario.method('toJSON', function() {
-    const { __v, _id, contrasenia, ...object } = this.toObject();
+Vehiculo.method('toJSON', function() {
+    const { __v, _id, ...object } = this.toObject();
     object.uid = _id;
     return object;
 
 });
 
 
-module.exports = model('Usuario', Usuario);
+module.exports = model('Vehiculo', Vehiculo);

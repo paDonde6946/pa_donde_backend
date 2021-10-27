@@ -8,6 +8,9 @@ const Usuario = require('../modelo/Usuario_modelo');
 // Importaciones de token
 const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 const { cifrarTexto } = require("../ayudas/cifrado")
+const { crearVehciulo } = require("../ayudas/cifrado");
+const Vehiculo = require('../modelo/Vehiculo_modelo');
+
 
 
 const crearUsuario = async(req, res = response) => {
@@ -209,6 +212,50 @@ const cambiarContrasenia = async(req, res = response) => {
     }
 }
 
+
+const agregarVehiculo = async(req, res = response) => {
+
+    try {
+
+        const { uid, cedula, placa } = res.body;
+        const usuario = Usuario.findOne({ cedula });
+
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el usuario'
+            });
+        }
+
+        const vehiculo = Vehiculo.findOne({ placa });
+        if (!vehiculo) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el vehiculos'
+            });
+        }
+
+        vehiculo = new Vehiculo(req.body);
+        vehiculo.save();
+
+        usuario.vehiculos.push(vehiculo);
+
+        res.json({
+            ok: true,
+            vehiculo
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+
+
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
@@ -216,5 +263,6 @@ module.exports = {
     actualizarUsuario,
     cambiarEstadoUsuario,
     renovarToken,
-    cambiarContrasenia
+    cambiarContrasenia,
+    agregarVehiculo
 }

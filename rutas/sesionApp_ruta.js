@@ -32,6 +32,7 @@ router.put('/usuario/registrar', [
     check('celular', 'El celular es obligatorio').isNumeric().not().isEmpty(),
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
+    check('cedula', 'El cedula es obligatorio').not().isEmpty().isNumeric(),
     validarCampos,
 ], crearUsuario);
 
