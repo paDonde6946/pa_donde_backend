@@ -106,7 +106,7 @@ const olvidarContrasenia = async(req, res = response) => {
     try {
         let { correo } = req.body;
         if (correo == null || correo == undefined) {
-            correo = req.query;
+            correo = req.query.correo;
         }
         const usuario = await Usuario.findOne({ correo });
 
