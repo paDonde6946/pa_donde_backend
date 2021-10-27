@@ -28,7 +28,7 @@ const Vehiculo = Schema({
         require: true
     },
     modelo: {
-        type: Number,
+        type: String,
         require: true
     },
     estado: {

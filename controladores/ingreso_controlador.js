@@ -104,9 +104,9 @@ const loginAdmin = async(req, res = response) => {
  */
 const olvidarContrasenia = async(req, res = response) => {
     try {
-        const { correo } = req.body;
+        let { correo } = req.body;
         if (correo == null || correo == undefined) {
-            const { correo } = req.params;
+            correo = req.query;
         }
         const usuario = await Usuario.findOne({ correo });
 

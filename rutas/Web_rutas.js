@@ -39,6 +39,8 @@ router.post('/usuario/actualizarUsuario', [
     validarJWT
 ], actualizarUsuario);
 
+
+//  Ruta completa : /app/vehiculos/agregarVehiculo
 router.post('/vehiculos/agregarVehiculo', [
     check('uid', 'El uid es obligatorio').notEmpty(),
     check('placa', 'El placa es obligatorio').notEmpty(),

@@ -37,12 +37,11 @@ app.use('/app/login', require('./rutas/SesionApp_ruta'));
 app.use('/web/login', require('./rutas/SesionApp_ruta'));
 
 
-// Ruta Usuiario Movil 
+// Ruta Usuiario Web
 app.use('/web', require('./rutas/Web_rutas'));
 
-// Ruta Usuiario Web
+// Ruta Usuiario Movil 
 app.use('/app', require('./rutas/App_ruta'));
-
 
 
 servidor.listen(process.env.PORT, (err) => {

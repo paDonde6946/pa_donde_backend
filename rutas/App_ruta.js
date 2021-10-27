@@ -26,10 +26,11 @@ router.post('/actualizarPerfil', [
     validarJWT
 ], actualizarUsuario);
 
+//  Ruta completa : /app/agregarVehiculo
 router.post('/agregarVehiculo', [
     check('uid', 'El uid es obligatorio').notEmpty(),
     check('placa', 'El placa es obligatorio').notEmpty(),
-    check('tipoVehiculo', 'El tipoVehiculo es obligatorio').notEmpty().isNumeric(),
+    check('tipoVehiculo', 'El tipoVehiculo es obligatorio').notEmpty().isNumeric().matches(/(1|2|3)/),
     check('color', 'El color es obligatorio').notEmpty().isString(),
     check('marca', 'El marca es obligatorio').notEmpty().isString(),
     check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
@@ -37,7 +38,7 @@ router.post('/agregarVehiculo', [
     check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
     validarCampos,
     validarJWT
-], agregarVehiculo)
+], agregarVehiculo);
 
 
 
