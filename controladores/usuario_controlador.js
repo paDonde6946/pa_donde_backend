@@ -212,6 +212,34 @@ const cambiarContrasenia = async(req, res = response) => {
     }
 }
 
+const cambiarContraseniaAdmin = async(req, res = response) => {
+    try {
+        const uid = req.body.uid;
+        const { contrasenia } = req.body;
+        const usuario = await Usuario.findById(uid);
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el usuario'
+            });
+        }
+        usuario.contrasenia = cifrarTexto(contrasenia);
+        usuario.cambio_contrasenia = 0;
+        console.log(usuario);
+        usuario.save();
+        res.json({
+            ok: true
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
 
 const agregarVehiculo = async(req, res = response) => {
 
@@ -267,5 +295,6 @@ module.exports = {
     cambiarEstadoUsuario,
     renovarToken,
     cambiarContrasenia,
-    agregarVehiculo
+    agregarVehiculo,
+    cambiarContraseniaAdmin
 }
