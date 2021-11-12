@@ -7,7 +7,7 @@ const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
 const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo } = require('../controladores/usuario_controlador');
-
+const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo } = require('../controladores/vehiculo_controlador')
 
 const router = Router();
 
@@ -39,12 +39,10 @@ router.post('/usuario/actualizarUsuario', [
     validarJWT
 ], actualizarUsuario);
 
-
-//  Ruta completa : /app/vehiculos/agregarVehiculo
+//  Ruta completa : /web/vehiculos/agregarVehiculo
 router.post('/vehiculos/agregarVehiculo', [
-    check('uid', 'El uid es obligatorio').notEmpty(),
     check('placa', 'El placa es obligatorio').notEmpty(),
-    check('tipoVehiculo', 'El tipoVehiculo es obligatorio').notEmpty().isNumeric().matches(1 | 2 | 3),
+    check('tipoVehiculo', 'El tipoVehiculo es obligatorio').notEmpty().isNumeric().matches(/(1|2|3)/),
     check('color', 'El color es obligatorio').notEmpty().isString(),
     check('marca', 'El marca es obligatorio').notEmpty().isString(),
     check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
@@ -54,7 +52,21 @@ router.post('/vehiculos/agregarVehiculo', [
     validarJWT
 ], agregarVehiculo);
 
+//  Ruta completa : /web/vehiculos/listarVehiculos
+router.get('/vehiculos/listarVehiculos', [
+    validarCampos,
+    validarJWT
+], traerVehciulos);
+
+router.put('/vehiculos/cambiarEstado/:uid' , [
+    validarCampos,
+    validarJWT
+], cambiarEstadoVehciulo)
 
 
+router.put('/vehiculos/actualizarVehiculo/:uid' , [
+    validarCampos,
+    validarJWT
+], actualizarVehciulo)
 
 module.exports = router;

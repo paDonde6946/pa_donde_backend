@@ -218,7 +218,7 @@ const agregarVehiculo = async(req, res = response) => {
     try {
 
         const { uid, cedula, placa } = req.body;
-        const usuario = Usuario.findOne({ cedula });
+        const usuario = await Usuario.findOne({ cedula });
 
         if (!usuario) {
             return res.status(400).json({
@@ -226,22 +226,19 @@ const agregarVehiculo = async(req, res = response) => {
                 msg: 'No existe el usuario'
             });
         }
+        const vehiculoExistente = await Vehiculo.findOne({ placa });
 
-        const vehiculoExistente = Vehiculo.findOne({ placa });
-        console.log(vehiculoExistente);
-        if (!vehiculoExistente) {
+        if (vehiculoExistente) {
             return res.status(400).json({
                 ok: false,
-                msg: 'No existe el vehiculos'
+                msg: ' Ya existe el vehiculos'
             });
         }
 
         const vehiculo = new Vehiculo(req.body);
         vehiculo.save();
-        if (usuario.vehiculos == undefined) {
-            console.log("Hola mundo ");
-            usuario.vehiculos = [{ vehiculoId: vehiculo.uid }];
-        }
+        usuario.vehiculos.push({ vehiculoId: vehiculo.uid });
+        usuario.save();
 
         res.json({
             ok: true,

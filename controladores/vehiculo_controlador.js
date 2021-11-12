@@ -10,21 +10,6 @@ const Vehiculo = require('../modelo/Vehiculo_modelo');
  */
 const tipoVehiculo = [1, 2, 3]
 
-const crearVehciulo = async(req) => {
-
-    try {
-
-        const vehiculo = new Vehiculo(req.body);
-        await vehiculo.save();
-
-        return vehiculo;
-
-    } catch (error) {
-
-        return false;
-    }
-}
-
 
 const buscarVehciulo = async(req, res = response) => {
 
@@ -56,9 +41,10 @@ const traerVehciulos = async(req, res = response) => {
 
     try {
         const listadoVehiculo = await Vehiculo.find();
+        listadoVehiculo.tipoVehiculo = 
         res.json({
             ok: true,
-            listaUsuario
+            listadoVehiculo
         });
 
     } catch (error) {
@@ -74,23 +60,9 @@ const actualizarVehciulo = async(req, res = response) => {
 
     try {
         const {
-            uid,
-            placa,
-            tipoVehiculo,
-            color,
-            marca,
-            anio,
-            modelo
-        } = req.body;
-
-        const vehiculo = await Vehiculo.findById(uid);
-        vehiculo.placa = placa;
-        vehiculo.tipoVehiculo = tipoVehiculo;
-        vehiculo.color = color;
-        vehiculo.marca = marca;
-        vehiculo.anio = anio;
-        vehiculo.modelo = modelo;
-        vehiculo.save();
+            uid
+        } = req.params;
+        const vehiculo = await Vehiculo.findByIdAndUpdate(uid, req.body);
 
         res.json({
             ok: true,
@@ -106,9 +78,10 @@ const actualizarVehciulo = async(req, res = response) => {
 }
 
 const cambiarEstadoVehciulo = async(req, res = response) => {
-
+    
     try {
-        const { uid } = req.body;
+        const { uid } = req.params;
+        console.log(uid);
         const vehiculo = await Vehiculo.findById(uid);
 
         if (!vehiculo) {
@@ -140,8 +113,8 @@ const cambiarEstadoVehciulo = async(req, res = response) => {
 
 
 module.exports = {
-    crearVehciulo,
     buscarVehciulo,
     actualizarVehciulo,
-    cambiarEstadoVehciulo
+    cambiarEstadoVehciulo,
+    traerVehciulos
 }
