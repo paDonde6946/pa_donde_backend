@@ -7,7 +7,7 @@ const { validarCampos, validarCorreo } = require('../middlewares/validar_campos_
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
 const { loginUsuario, loginAdmin, olvidarContrasenia } = require('../controladores/ingreso_controlador');
-const { crearUsuario, renovarToken } = require('../controladores/usuario_controlador');
+const { crearUsuario, renovarToken, cambiarContraseniaAdmin } = require('../controladores/usuario_controlador');
 
 
 const router = Router();
@@ -46,6 +46,12 @@ router.post('/olvidarContrasenia', [
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
     validarCampos,
 ], olvidarContrasenia);
+
+router.post('/cambiarContraseniaAdmin', [
+    check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
+    validarCampos,
+    // validarJWT
+], cambiarContraseniaAdmin);
 
 router.get('/renovarToken', validarJWT, renovarToken);
 
