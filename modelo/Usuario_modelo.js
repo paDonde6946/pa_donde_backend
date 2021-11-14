@@ -48,6 +48,11 @@ const Usuario = Schema({
         vehiculoId: {
             type: Schema.Types.ObjectId
         }
+    }],
+    servicios: [{
+        servicioId: {
+            type: Schema.Types.ObjectId
+        }
     }]
 }, {
     timestamps: true

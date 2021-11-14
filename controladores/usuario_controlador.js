@@ -10,6 +10,7 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 const { cifrarTexto } = require("../ayudas/cifrado")
 const { crearVehciulo } = require("../ayudas/cifrado");
 const Vehiculo = require('../modelo/Vehiculo_modelo');
+const Servicio = require('./servicio_controlador')
 
 
 
@@ -264,9 +265,9 @@ const agregarVehiculo = async(req, res = response) => {
         }
 
         const vehiculo = new Vehiculo(req.body);
-        vehiculo.save();
-        usuario.vehiculos.push({ vehiculoId: vehiculo.uid });
-        usuario.save();
+        await vehiculo.save();
+        usuario.vehiculos.push({ vehiculoId: vehiculo._id });
+        await usuario.save();
 
         res.json({
             ok: true,
@@ -280,8 +281,39 @@ const agregarVehiculo = async(req, res = response) => {
             msg: 'Hable con el admin'
         })
     }
+}
 
 
+const agregarServicio = async(req, res = response) => {
+    
+    try {
+
+        const { uid } = req.body;
+        const usuario = await Usuario.findById(uid);        
+        let servicio = req.body == undefined || req.body == null ? req.query : req.body;
+
+        let servicioId = await Servicio.crearServicio(servicio);
+        if(!servicioId){
+            res.json({
+                ok: false,
+                msg: "No se pudo creear intente mas tarde"
+            });
+        }
+        
+        await usuario.servicios.push({servicioId });
+        await usuario.save();
+        
+        res.json({
+            ok: true
+        });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
 }
 
 module.exports = {
@@ -293,5 +325,6 @@ module.exports = {
     renovarToken,
     cambiarContrasenia,
     agregarVehiculo,
-    cambiarContraseniaAdmin
+    cambiarContraseniaAdmin,
+    agregarServicio
 }
