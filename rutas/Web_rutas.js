@@ -7,7 +7,8 @@ const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
 const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio } = require('../controladores/usuario_controlador');
-const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo } = require('../controladores/vehiculo_controlador')
+const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
+const { traerTodosServicios } = require('../controladores/servicio_controlador');
 
 const router = Router();
 
@@ -75,16 +76,26 @@ router.put('/vehiculos/actualizarVehiculo/:uid' , [
     validarJWT
 ], actualizarVehciulo);
 
+router.get('/vehiculos/buscarVehiculo/:placa' , [
+    validarCampos,
+    validarJWT
+], buscarVehiculoPorPlaca)
+
 router.post('/servicio/agregarServicio' , [
     check('puntoInicio', "El puntoInicio es obligatorio").notEmpty().isString(),
     check('puntoFinal', "El puntoFinal es obligatorio").notEmpty().isString(),
-    check('fecha', "El fecha es obligatorio o puede que no sea una fecha").notEmpty().isDate(),
-    check('descripcion', "El descripcion es obligatorio").notEmpty().isString(),
+    // check('fecha', "El fecha es obligatorio o puede que no sea una fecha").notEmpty().isDate(),
+    // check('descripcion', "El descripcion es obligatorio").notEmpty().isString(),
     check('vehiculo', "El vehiculo es obligatorio").notEmpty().isString(),
     check('cuposTotales', "El cuposTotales es obligatorio").notEmpty().isNumeric(),
     validarCampos,
     validarJWT
 ], agregarServicio);
+
+router.get('/servicio/listarServicio', [
+    validarCampos,
+    validarJWT
+], traerTodosServicios);
 
 module.exports = router;
 

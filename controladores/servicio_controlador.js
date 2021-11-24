@@ -19,6 +19,25 @@ const crearServicio = async(data) => {
 
 }
 
+const traerTodosServicios = async(req, res = response) => {
+
+    try {
+        const listaServicio = await Servicio.find();
+
+        res.json({
+            ok: true,
+            listaServicio
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
 module.exports  = {
-    crearServicio
+    crearServicio,
+    traerTodosServicios
 }

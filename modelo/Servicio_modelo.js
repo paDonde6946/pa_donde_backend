@@ -39,7 +39,7 @@ const Servicio = Schema({
         }
     ],
     cuposTotales : {
-        type: Date,
+        type: Number,
         require: true,
     },
     estado : {
