@@ -50,7 +50,7 @@ router.post('/olvidarContrasenia', [
 router.post('/cambiarContraseniaAdmin', [
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
     validarCampos,
-    // validarJWT
+    validarJWT
 ], cambiarContraseniaAdmin);
 
 router.get('/renovarToken', validarJWT, renovarToken);

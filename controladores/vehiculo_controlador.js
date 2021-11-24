@@ -36,6 +36,32 @@ const buscarVehciulo = async(req, res = response) => {
     }
 }
 
+const buscarVehiculoPorPlaca = async(req, res = response) => {
+
+    try {
+        const { placa } = req.params;
+        console.log(placa);
+        const vehiculo = await Vehiculo.findOne({placa})
+        console.log(vehiculo);
+        if (!vehiculo) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el vehiculo'
+            });
+        }
+        res.json({
+            ok: true,
+            vehiculo
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
 
 const traerVehciulos = async(req, res = response) => {
 
@@ -116,5 +142,6 @@ module.exports = {
     buscarVehciulo,
     actualizarVehciulo,
     cambiarEstadoVehciulo,
-    traerVehciulos
+    traerVehciulos,
+    buscarVehiculoPorPlaca
 }
