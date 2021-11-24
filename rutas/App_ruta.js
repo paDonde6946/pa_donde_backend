@@ -40,7 +40,7 @@ router.post('/agregarVehiculo', [
 ], agregarVehiculo);
 
 
-//  Ruta completa : /app/agregarVehiculo
+//  Ruta completa : /app/eliminarVehiculo
 router.post('/eliminarVehiculo', [
     check('placa', 'El placa es obligatorio').notEmpty(),
     validarCampos,

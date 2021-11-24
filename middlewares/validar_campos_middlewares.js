@@ -32,7 +32,6 @@ const validarCorreo = (req, res, next) => {
     if (correo == null) {
         correo = req.params;
     }
-    console.log(correo);
     if (!(/[a-z]@unbosque.edu.co/.test(correo)))
         res.status(404).json({
             ok: false,

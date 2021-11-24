@@ -17,7 +17,6 @@ const { enviarOlvidoContrasenia } = require('../correos/correos');
 const loginUsuario = async(req, res = response) => {
 
     const { correo, contrasenia } = req.params;
-    console.log(req.params);
 
     try {
         const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
@@ -106,19 +105,19 @@ const olvidarContrasenia = async(req, res = response) => {
     try {
         let { correo } = req.body;
         if (correo == null || correo == undefined) {
+            console.log("Entro por medio del admin");
             correo = req.query.correo;
         }
+
         const usuario = await Usuario.findOne({ correo });
 
         var password = generator.generate({
             length: 10,
             numbers: true
         });
-        console.log(password);
 
         usuario.contrasenia = cifrarTexto(password);
         usuario.cambio_contrasenia = 1;
-        console.log(usuario);
         usuario.save();
 
         if (!enviarOlvidoContrasenia(usuario.correo, password)) {

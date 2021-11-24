@@ -226,7 +226,6 @@ const cambiarContraseniaAdmin = async(req, res = response) => {
         }
         usuario.contrasenia = cifrarTexto(contrasenia);
         usuario.cambio_contrasenia = 0;
-        console.log(usuario);
         usuario.save();
         res.json({
             ok: true

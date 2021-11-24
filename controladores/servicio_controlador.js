@@ -10,7 +10,6 @@ const crearServicio = async(data) => {
 
         let servicio = new Servicio(data);
         servicio = await servicio.save();
-        console.log(servicio._id);
         return servicio._id;
         
     } catch (error) {
