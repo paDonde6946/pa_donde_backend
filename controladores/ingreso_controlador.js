@@ -115,6 +115,7 @@ const olvidarContrasenia = async(req, res = response) => {
             length: 10,
             numbers: true
         });
+        console.log(password);
 
         usuario.contrasenia = cifrarTexto(password);
         usuario.cambio_contrasenia = 1;

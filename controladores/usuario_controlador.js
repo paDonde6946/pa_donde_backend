@@ -315,6 +315,28 @@ const agregarServicio = async(req, res = response) => {
     }
 }
 
+
+const listarVehiculosPorUid = async(req, res = response) => {
+
+    try {
+        const uid  = req.uid;
+        let usurio = await Usuario.findById(uid).populate('vehiculos.vehiculoId');
+        
+        res.json({
+            ok: true,
+            vehiculos : usurio.vehiculos
+        });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
@@ -325,5 +347,6 @@ module.exports = {
     cambiarContrasenia,
     agregarVehiculo,
     cambiarContraseniaAdmin,
-    agregarServicio
+    agregarServicio,
+    listarVehiculosPorUid
 }

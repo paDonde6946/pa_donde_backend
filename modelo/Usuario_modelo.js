@@ -46,7 +46,8 @@ const Usuario = Schema({
     },
     vehiculos: [{
         vehiculoId: {
-            type: Schema.Types.ObjectId
+            type: Schema.Types.ObjectId,
+            ref: "Vehiculo"
         }
     }],
     servicios: [{

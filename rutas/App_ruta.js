@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { cambiarContrasenia, actualizarUsuario, agregarVehiculo } = require('../controladores/usuario_controlador');
+const { cambiarContrasenia, actualizarUsuario, agregarVehiculo, listarVehiculosPorUid } = require('../controladores/usuario_controlador');
 const { cambiarEstadoVehciulo } = require('../controladores/vehiculo_controlador')
 
 const router = Router();
@@ -25,6 +25,11 @@ router.post('/actualizarPerfil', [
     validarCampos,
     validarJWT
 ], actualizarUsuario);
+
+// Ruta completa : /app/vehiculosPorUid
+router.get('/vehiculosPorUid', [
+    validarJWT
+], listarVehiculosPorUid);
 
 //  Ruta completa : /app/agregarVehiculo
 router.post('/agregarVehiculo', [
