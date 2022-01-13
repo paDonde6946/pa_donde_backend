@@ -266,7 +266,7 @@ const agregarVehiculo = async(req, res = response) => {
         const vehiculo = new Vehiculo(req.body);
         await vehiculo.save();
         usuario.vehiculos.push({ vehiculoId: vehiculo._id });
-        await usuario.save();
+        // await usuario.save();
 
         res.json({
             ok: true,
