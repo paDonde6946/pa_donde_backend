@@ -9,6 +9,7 @@ const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio } = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
 const { traerTodosServicios } = require('../controladores/servicio_controlador');
+const { cantidadUsuarios, cantidadVehiculos, cantidadConductores } = require('../controladores/dashboard_controlador');
 
 const router = Router();
 
@@ -96,6 +97,21 @@ router.get('/servicio/listarServicio', [
     validarCampos,
     validarJWT
 ], traerTodosServicios);
+
+router.get('/dashboard/estadisticas/cantidadUsuarios', [
+    validarCampos,
+    validarJWT
+], cantidadUsuarios);
+
+router.get('/dashboard/estadisticas/cantidadVehiculos', [
+    validarCampos,
+    validarJWT
+], cantidadVehiculos);
+
+router.get('/dashboard/estadisticas/cantidadConductores', [
+    validarCampos,
+    validarJWT
+], cantidadConductores);
 
 module.exports = router;
 
