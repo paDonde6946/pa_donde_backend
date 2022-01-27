@@ -8,8 +8,7 @@ const crearServicio = async(data) => {
 
     try {
 
-        let servicio = new Servicio(data);
-        servicio = await servicio.save();
+        let servicio = await Servicio.create(data);
         return servicio._id;
         
     } catch (error) {

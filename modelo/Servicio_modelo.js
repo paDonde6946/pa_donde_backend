@@ -3,18 +3,24 @@ const { compareSync } = require("bcrypt");
 
 const { Schema, model } = require('mongoose');
 
-/**
- * Estado = { 1 : En espera , 2 : En ruta , 3 : Finalizado }
- */
+const {EstadoViaje} = require('../utils/enums/estadoViaje_enum');
 
 
 const Servicio = Schema({
 
-    puntoInicio : {
+    nombreOrigen: {
         type: String,
         require: true,
     },
-    puntoFinal : {
+    nombreDestino : {
+        type: String,
+        require: true,
+    },
+    polylineRuta : {
+        type: String,
+        require: true,
+    },
+    horaDeInicio  : {
         type: String,
         require: true,
     },
@@ -22,33 +28,30 @@ const Servicio = Schema({
         type: Date,
         require: true,
     },
-    descripcion : {
-        type: String
-    },
-    vehiculo: {
+    pasajeros : [{
+        pasajero : {
+            type: Schema.Types.ObjectId
+        },
+        puntuacionPasajero : {
+            type : Number
+        }
+    }],
+    idVehiculo :{
         type: Schema.Types.ObjectId,
         require: true,
     },
-    pasajeros : [{
-            pasajero : {
-                type: Schema.Types.ObjectId
-            },
-            puntuacionPasajero : {
-                type : Number
-            }
-        }
-    ],
-    cuposTotales : {
+    cantidadCupos :{
         type: Number,
         require: true,
     },
+    auxilioEconomico: {
+        type: Schema.Types.ObjectId
+    },
     estado : {
         type : Number,
-        default : 1
+        default : EstadoViaje.Esperando
     },
-    puntuacion : {
-        type : Number
-    }
+
 }, {
     timestamps: true
 });

@@ -2,6 +2,7 @@
 const { compareSync } = require("bcrypt");
 
 const { Schema, model } = require('mongoose');
+const {Estado} = require('../utils/enums/estado_enum')
 
 const Vehiculo = Schema({
 
@@ -34,7 +35,7 @@ const Vehiculo = Schema({
     estado: {
         type: Number,
         require: true,
-        default: 1
+        default: Estado.Activo
     }
 }, {
     timestamps: true

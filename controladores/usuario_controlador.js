@@ -10,7 +10,9 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 const { cifrarTexto } = require("../ayudas/cifrado")
 const { crearVehciulo } = require("../ayudas/cifrado");
 const Vehiculo = require('../modelo/Vehiculo_modelo');
-const Servicio = require('./servicio_controlador')
+const Servicio = require('./servicio_controlador');
+const AuxilioEconomico_modelo = require('../modelo/AuxilioEconomico_modelo');
+const { Estado } = require('../utils/enums/estado_enum');
 
 
 
@@ -311,7 +313,7 @@ const agregarServicio = async(req, res = response) => {
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'
-        })
+        });
     }
 }
 
@@ -337,6 +339,34 @@ const listarVehiculosPorUid = async(req, res = response) => {
 
 }
 
+
+const preAgregarServicio = async(req, res = response) => {
+
+    try {
+        
+        let uid = req.uid;
+        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos.vehiculoId', 'placa tipoVehiculo');
+        const auxilioEconomico = await AuxilioEconomico_modelo.find({ estado : Estado.Activo });
+        let vehiculos = [];
+        (vehiculosBD.vehiculos).forEach(element => {
+            vehiculos.push(element.vehiculoId);
+        });
+
+        res.json({
+            ok: true,
+            vehiculos,
+            auxilioEconomico
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
@@ -348,5 +378,6 @@ module.exports = {
     agregarVehiculo,
     cambiarContraseniaAdmin,
     agregarServicio,
-    listarVehiculosPorUid
+    listarVehiculosPorUid,
+    preAgregarServicio
 }

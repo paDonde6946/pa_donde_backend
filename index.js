@@ -1,6 +1,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
+const log = require('./utils/logger/logger');
 
 
 //TODO AVERIGUAR PARA QUE SIRVE
@@ -46,5 +47,5 @@ app.use('/app', require('./rutas/App_ruta'));
 
 servidor.listen(process.env.PORT, (err) => {
     if (err) throw new Error(err);
-    console.log(' Servidor correindo en puerto ', process.env.PORT);
+    log.info(' Servidor correindo en puerto '+ process.env.PORT );
 });
