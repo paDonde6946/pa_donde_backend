@@ -82,21 +82,15 @@ router.get('/vehiculos/buscarVehiculo/:placa' , [
     validarJWT
 ], buscarVehiculoPorPlaca)
 
-router.post('/servicio/agregarServicio' , [
-    check('puntoInicio', "El puntoInicio es obligatorio").notEmpty().isString(),
-    check('puntoFinal', "El puntoFinal es obligatorio").notEmpty().isString(),
-    // check('fecha', "El fecha es obligatorio o puede que no sea una fecha").notEmpty().isDate(),
-    // check('descripcion', "El descripcion es obligatorio").notEmpty().isString(),
-    check('vehiculo', "El vehiculo es obligatorio").notEmpty().isString(),
-    check('cuposTotales', "El cuposTotales es obligatorio").notEmpty().isNumeric(),
-    validarCampos,
-    validarJWT
-], agregarServicio);
-
 router.get('/servicio/listarServicio', [
     validarCampos,
     validarJWT
 ], traerTodosServicios);
+
+router.put('/servicio/cambiarEstado/:uid' , [
+    validarCampos,
+    validarJWT
+], cambiarEstadoServicio);
 
 router.get('/dashboard/estadisticas/cantidadUsuarios', [
     validarCampos,
