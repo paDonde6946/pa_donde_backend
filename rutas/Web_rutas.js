@@ -8,7 +8,7 @@ const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
 const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio } = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
-const { traerTodosServicios } = require('../controladores/servicio_controlador');
+const { traerTodosServicios, cambiarEstadoServicio } = require('../controladores/servicio_controlador');
 const { cantidadUsuarios, cantidadVehiculos, cantidadConductores } = require('../controladores/dashboard_controlador');
 
 const router = Router();

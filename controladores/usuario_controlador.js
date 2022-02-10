@@ -13,6 +13,7 @@ const Vehiculo = require('../modelo/Vehiculo_modelo');
 const Servicio = require('./servicio_controlador');
 const AuxilioEconomico_modelo = require('../modelo/AuxilioEconomico_modelo');
 const { Estado } = require('../utils/enums/estado_enum');
+const log = require('../utils/logger/logger');
 
 
 
@@ -285,48 +286,20 @@ const agregarVehiculo = async(req, res = response) => {
 }
 
 
-const agregarServicio = async(req, res = response) => {
-    
-    try {
-
-        const { uid } = req.body;
-        const usuario = await Usuario.findById(uid);        
-        let servicio = req.body == undefined || req.body == null ? req.query : req.body;
-
-        let servicioId = await Servicio.crearServicio(servicio);
-        if(!servicioId){
-            res.json({
-                ok: false,
-                msg: "No se pudo creear intente mas tarde"
-            });
-        }
-        
-        await usuario.servicios.push({servicioId });
-        await usuario.save();
-        
-        res.json({
-            ok: true
-        });
-        
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el admin'
-        });
-    }
-}
 
 
 const listarVehiculosPorUid = async(req, res = response) => {
-
+    
     try {
         const uid  = req.uid;
-        let usurio = await Usuario.findById(uid).populate('vehiculos.vehiculoId');
-        
+        let usurio = await Usuario.findById(uid, 'vehiculos.vehiculoId').populate('vehiculos.vehiculoId');
+        let vehiculos = [];
+        (usurio.vehiculos).forEach(element => {
+            vehiculos.push(element.vehiculoId);
+        });
         res.json({
             ok: true,
-            vehiculos : usurio.vehiculos
+            vehiculos
         });
         
     } catch (error) {
@@ -336,9 +309,37 @@ const listarVehiculosPorUid = async(req, res = response) => {
             msg: 'Hable con el admin'
         })
     }
-
+    
 }
 
+const agregarServicio = async(req, res = response) => {
+    
+    try {
+        const creacionServicio = await Servicio.crearServicio(req.body);
+        if(creacionServicio.rs){
+            let user = await Usuario.findById(req.uid);
+            user.servicios.push({servicioId : creacionServicio.msg}) 
+            await user.save();
+            res.json({
+                ok: true,
+                msg: "Su servicio fue creado exitosamente."
+            });
+        }else{
+            log.error(req.uid, req.body, req.params, req.query, creacionServicio.msg);
+            res.json({
+                ok: false,
+                msg: "Lo sentimos no pudimos atender su solicitud."
+            });
+        }
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+}
 
 const preAgregarServicio = async(req, res = response) => {
 
@@ -367,6 +368,34 @@ const preAgregarServicio = async(req, res = response) => {
     }
 }
 
+const separaCupo = async(req, res = response) => {
+
+    try {
+        const separacion = await Servicio.agregarCupo(req.uid, req.body.idServicio);
+        if(separacion == true){
+            res.json({
+                ok: true,
+                msg: "Su cupo fue apartado exitosamente."
+            });
+        }else {
+            log.error(req.uid, req.body, req.params, req.query, separacion);
+            res.json({
+                ok: true,
+                msg: "Lo sentimos no pudimos atender su solicitud."
+            });
+        }
+
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+
+}
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
@@ -379,5 +408,6 @@ module.exports = {
     cambiarContraseniaAdmin,
     agregarServicio,
     listarVehiculosPorUid,
-    preAgregarServicio
+    preAgregarServicio,
+    separaCupo,
 }

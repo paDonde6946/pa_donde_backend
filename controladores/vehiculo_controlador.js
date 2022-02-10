@@ -1,4 +1,5 @@
 const { response } = require('express');
+const log = require('../utils/logger/logger');
 
 // Importaciones de modelo
 const Vehiculo = require('../modelo/Vehiculo_modelo');
@@ -106,11 +107,14 @@ const actualizarVehciulo = async(req, res = response) => {
 const cambiarEstadoVehciulo = async(req, res = response) => {
     
     try {
-        const { uid } = req.params;
-        console.log(uid);
+        let { uid } = req.params;
+        if(uid == undefined || uid == null){
+            uid = req.uid;
+        }
         const vehiculo = await Vehiculo.findById(uid);
 
         if (!vehiculo) {
+            log.error(req.uid, req.body, req.params, req.query, 'No existe el vehiculo');
             return res.status(400).json({
                 ok: false,
                 msg: 'No existe el vehiculo'
@@ -129,6 +133,7 @@ const cambiarEstadoVehciulo = async(req, res = response) => {
             ok: true
         });
     } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'

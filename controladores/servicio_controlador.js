@@ -9,10 +9,10 @@ const crearServicio = async(data) => {
     try {
 
         let servicio = await Servicio.create(data);
-        return servicio._id;
+        return { msg: servicio._id, rs: true};
         
     } catch (error) {
-        return false;
+        return { msg: error, rs: false}; 
     }
 
 }
@@ -67,8 +67,26 @@ const cambiarEstadoServicio = async(req, res = response) => {
     }
 }
 
+const agregarCupo = async(uidUsuario, idServicio) => {
+
+    try {
+        const servicioSeleccionado  = await Servicio.findById(idServicio);
+        if(servicioSeleccionado.cantidadCupos > servicioSeleccionado.pasajeros.length){
+            servicioSeleccionado.pasajeros.push({pasajero: uidUsuario});
+            servicioSeleccionado.save();
+            return true;
+        }else{
+            return "Lo sentimos no hay cupos.";
+        }
+    } catch (error) {
+        return error;
+    }
+
+}
+
 module.exports  = {
     crearServicio,
     traerTodosServicios,
-    cambiarEstadoServicio
+    cambiarEstadoServicio,
+    agregarCupo
 }

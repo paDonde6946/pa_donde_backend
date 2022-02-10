@@ -44,6 +44,12 @@ const Usuario = Schema({
         type: Number,
         default: 0
     },
+    calificacion_vehiculo: {
+        type: Number
+    },
+    calificacion_usuario: {
+        type: Number
+    },
     vehiculos: [{
         vehiculoId: {
             type: Schema.Types.ObjectId,

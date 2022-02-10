@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const log = require('../utils/logger/logger');
 
 
 /**
@@ -13,6 +14,7 @@ const validarCampos = (req, res, next) => {
     const errores = validationResult(req);
 
     if (!errores.isEmpty()) {
+        log.error(req.uid, req.body, req.params, req.query, JSON.stringify(errores.mapped()));
         return res.status(400).json({
             ok: false,
             errores: errores.mapped()

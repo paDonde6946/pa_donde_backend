@@ -1,5 +1,6 @@
 // IMPORTACION DEL PAQUETE MONGO
 const mongoose = require('mongoose');
+const log = require("../utils/logger/logger")
 
 
 /// CONEXION A LA BASE DE DATOS CONFIGURACION
@@ -12,8 +13,7 @@ const dbConnection = async() => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-
-        console.log("db online");
+        log.info("db online");
 
     } catch (error) {
         console.error(error);

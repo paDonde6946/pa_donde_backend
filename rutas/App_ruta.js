@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { cambiarContrasenia, actualizarUsuario, agregarVehiculo, listarVehiculosPorUid, preAgregarServicio } = require('../controladores/usuario_controlador');
+const { cambiarContrasenia, actualizarUsuario, agregarVehiculo, listarVehiculosPorUid, preAgregarServicio, separaCupo, agregarServicio } = require('../controladores/usuario_controlador');
 const { cambiarEstadoVehciulo } = require('../controladores/vehiculo_controlador')
 
 const router = Router();
@@ -46,10 +46,10 @@ router.post('/agregarVehiculo', [
 
 
 //  Ruta completa : /app/eliminarVehiculo
-router.post('/eliminarVehiculo', [
+router.delete('/eliminarVehiculo', [
     check('placa', 'El placa es obligatorio').notEmpty(),
-    validarCampos,
-    validarJWT
+    validarJWT,
+    validarCampos
 ], cambiarEstadoVehciulo);
 
 // /app/preAgregarServicio
@@ -58,5 +58,17 @@ router.get('/preAgregarServicio', [
     validarJWT
 ], preAgregarServicio);
 
+// /app/agregarServicio
+router.post('/agregarServicio', [
+    validarCampos,
+    validarJWT
+], agregarServicio);
+
+// /app/separaCupo
+router.post('/separaCupo', [
+    check('idServicio', 'El idServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], separaCupo);
 
 module.exports = router;
