@@ -14,6 +14,7 @@ const Servicio = require('./servicio_controlador');
 const AuxilioEconomico_modelo = require('../modelo/AuxilioEconomico_modelo');
 const { Estado } = require('../utils/enums/estado_enum');
 const log = require('../utils/logger/logger');
+const VehiculosControlador = require('../controladores/vehiculo_controlador')
 
 
 
@@ -53,7 +54,6 @@ const crearUsuario = async(req, res = response) => {
     }
 }
 
-
 const buscarUsuario = async(req, res = response) => {
 
     try {
@@ -81,7 +81,6 @@ const buscarUsuario = async(req, res = response) => {
     }
 }
 
-
 const traerTodosUsuarios = async(req, res = response) => {
 
     try {
@@ -99,7 +98,6 @@ const traerTodosUsuarios = async(req, res = response) => {
         })
     }
 }
-
 
 const actualizarUsuario = async(req, res = response) => {
 
@@ -164,7 +162,6 @@ const cambiarEstadoUsuario = async(req, res = response) => {
         })
     }
 }
-
 
 /**
  * 
@@ -243,21 +240,13 @@ const cambiarContraseniaAdmin = async(req, res = response) => {
     }
 }
 
-
 const agregarVehiculo = async(req, res = response) => {
 
     try {
 
-        const { uid, cedula, placa } = req.body;
-        const usuario = await Usuario.findOne({ cedula });
-
-        if (!usuario) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'No existe el usuario'
-            });
-        }
-        const vehiculoExistente = await Vehiculo.findOne({ placa });
+        const { placa } = req.body;
+        const usuario = await Usuario.findById(req.uid);
+        const vehiculoExistente = await Vehiculo.findOne({ placa: placa});
 
         if (vehiculoExistente) {
             return res.status(400).json({
@@ -265,28 +254,23 @@ const agregarVehiculo = async(req, res = response) => {
                 msg: ' Ya existe el vehiculos'
             });
         }
-
-        const vehiculo = new Vehiculo(req.body);
-        await vehiculo.save();
+        const vehiculo = await Vehiculo.create(req.body);
         usuario.vehiculos.push({ vehiculoId: vehiculo._id });
-        // await usuario.save();
+        await usuario.save();
 
         res.json({
             ok: true,
-            vehiculo
+            msg: "Felicitaciones su vehiculo se agrego correctamente."
         });
 
     } catch (error) {
-        console.error(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'
         })
     }
 }
-
-
-
 
 const listarVehiculosPorUid = async(req, res = response) => {
     
@@ -295,7 +279,9 @@ const listarVehiculosPorUid = async(req, res = response) => {
         let usurio = await Usuario.findById(uid, 'vehiculos.vehiculoId').populate('vehiculos.vehiculoId');
         let vehiculos = [];
         (usurio.vehiculos).forEach(element => {
-            vehiculos.push(element.vehiculoId);
+            if(element.vehiculoId.estado == Estado.Activo){
+                vehiculos.push(element.vehiculoId);
+            }
         });
         res.json({
             ok: true,
@@ -346,11 +332,13 @@ const preAgregarServicio = async(req, res = response) => {
     try {
         
         let uid = req.uid;
-        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos.vehiculoId', 'placa tipoVehiculo');
+        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos.vehiculoId');
         const auxilioEconomico = await AuxilioEconomico_modelo.find({ estado : Estado.Activo });
         let vehiculos = [];
         (vehiculosBD.vehiculos).forEach(element => {
-            vehiculos.push(element.vehiculoId);
+            if(element.vehiculoId.estado == Estado.Activo){
+                vehiculos.push(element.vehiculoId);
+            }
         });
 
         res.json({
@@ -396,6 +384,9 @@ const separaCupo = async(req, res = response) => {
 
 }
 
+
+
+
 module.exports = {
     crearUsuario,
     buscarUsuario,
@@ -409,5 +400,5 @@ module.exports = {
     agregarServicio,
     listarVehiculosPorUid,
     preAgregarServicio,
-    separaCupo,
+    separaCupo
 }

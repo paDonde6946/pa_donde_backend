@@ -44,6 +44,14 @@ const Servicio = Schema({
         type: Number,
         require: true,
     },
+    distancia : {
+        type: String,
+        require: true,
+    },
+    duracion : {
+        type: String,
+        require: true,
+    },
     idAuxilioEconomico: {
         require: true,
         type: Schema.Types.ObjectId

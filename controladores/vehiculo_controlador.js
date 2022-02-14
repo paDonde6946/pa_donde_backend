@@ -3,6 +3,7 @@ const log = require('../utils/logger/logger');
 
 // Importaciones de modelo
 const Vehiculo = require('../modelo/Vehiculo_modelo');
+const { Estado } = require('../utils/enums/estado_enum');
 
 /**
  * 1 : Carro
@@ -93,7 +94,7 @@ const actualizarVehciulo = async(req, res = response) => {
 
         res.json({
             ok: true,
-            vehiculo
+            msg: "Su vehiculo se actualizo correctamente."
         });
 
     } catch (error) {
@@ -121,16 +122,17 @@ const cambiarEstadoVehciulo = async(req, res = response) => {
             });
         }
 
-        if (vehiculo.estado == 1) {
-            vehiculo.estado = 0;
+        if (vehiculo.estado == Estado.Activo) {
+            vehiculo.estado = Estado.Inactivo;
         } else {
-            vehiculo.estado = 1;
+            vehiculo.estado = Estado.Activo;
         }
 
         vehiculo.save();
 
         res.json({
-            ok: true
+            ok: true,
+            msg: "El vehiculo se elimino correctamente"
         });
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
@@ -141,6 +143,22 @@ const cambiarEstadoVehciulo = async(req, res = response) => {
     }
 }
 
+/**
+ * Cambia el estado mediante una funcion
+ * @param {String} uid el uid del carro 
+ * @param {int} estado el estado al cual desea cambiar 
+ */
+const cambiarEstado = async (uid, cambioEstado) => {
+
+    try {
+        let vehiculo = await Vehiculo.findByIdAndUpdate(uid, { estado : cambioEstado});
+        return { ok: true };
+    } catch (error) {
+        return { ok: false, msg: "No existe el vehiculo de uid "+uid  };
+    }
+
+}
+
 
 
 module.exports = {
@@ -148,5 +166,6 @@ module.exports = {
     actualizarVehciulo,
     cambiarEstadoVehciulo,
     traerVehciulos,
-    buscarVehiculoPorPlaca
+    buscarVehiculoPorPlaca,
+    cambiarEstado
 }
