@@ -44,10 +44,10 @@ const Usuario = Schema({
         type: Number,
         default: 0
     },
-    calificacion_vehiculo: {
+    calificacionConductor: {
         type: Number
     },
-    calificacion_usuario: {
+    calificacionUsuario: {
         type: Number
     },
     vehiculos: [{

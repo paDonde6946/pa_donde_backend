@@ -56,8 +56,18 @@ router.get('/preAgregarServicio', [
     validarJWT
 ], preAgregarServicio);
 
+
 // /app/agregarServicio
 router.post('/agregarServicio', [
+    check('nombreOrigen', 'El nombreOrigen es obligatorio').notEmpty().isString(),
+    check('nombreDestino', 'El nombreDestino es obligatorio').notEmpty().isString(),
+    check('polylineRuta', 'El polylineRuta es obligatorio').notEmpty().isString(),
+    check('fechayhora', 'El fechayhora es obligatorio').notEmpty().isString(),
+    check('idVehiculo', 'El idVehiculo es obligatorio').notEmpty().isString(),
+    check('cantidadCupos', 'El cantidadCupos es obligatorio y numerico').notEmpty().isNumeric(),
+    check('idAuxilioEconomico', 'El idAuxilioEconomico es obligatorio').notEmpty().isString(),
+    check('distancia', 'El distancia es obligatorio').notEmpty().isString(),
+    check('duracion', 'El duracion es obligatorio').notEmpty().isString(),
     validarCampos,
     validarJWT
 ], agregarServicio);

@@ -20,11 +20,7 @@ const Servicio = Schema({
         type: String,
         require: true,
     },
-    horaDeInicio  : {
-        type: String,
-        require: true,
-    },
-    fecha : {
+    fechayhora : {
         type: Date,
         require: true,
     },
