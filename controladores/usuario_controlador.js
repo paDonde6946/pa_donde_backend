@@ -278,16 +278,11 @@ const listarVehiculosPorUid = async(req, res = response) => {
     
     try {
         const uid  = req.uid;
-        let usurio = await Usuario.findById(uid, 'vehiculos.vehiculoId').populate('vehiculos.vehiculoId');
-        let vehiculos = [];
-        (usurio.vehiculos).forEach(element => {
-            if(element.vehiculoId.estado == Estado.Activo){
-                vehiculos.push(element.vehiculoId);
-            }
-        });
+        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos', null, { estado : Estado.Activo });
+        
         res.json({
             ok: true,
-            vehiculos
+            vehiculos:vehiculosBD.vehiculos
         });
         
     } catch (error) {
