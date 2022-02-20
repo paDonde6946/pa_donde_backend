@@ -50,7 +50,13 @@ const Usuario = Schema({
     calificacionUsuario: {
         type: Number
     },
-    features:{
+    historialOrigen:{
+        type: Object,
+        default: {}
+    },
+    historialDestino:{
+        type: Object,
+        default: {}
     },
     vehiculos: [{
         type: Schema.Types.ObjectId,

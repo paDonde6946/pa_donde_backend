@@ -13,7 +13,7 @@ sendEmail = function(opcionesCorreo) {
     transporter.sendMail(opcionesCorreo, function(error, info) {
         if (error) {
             return false;
-            console.log(error);
+            log.error(req.uid, req.body, req.params, req.query, error);
         } else {
             console.log("Email sent");
             return true;

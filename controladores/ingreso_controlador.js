@@ -9,6 +9,8 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 const generator = require('generate-password');
 const { cifrarTexto, compararCifrado } = require('../ayudas/cifrado');
 const { enviarOlvidoContrasenia } = require('../correos/correos');
+const log = require('../utils/logger/logger');
+
 
 // Tipos de Usuario 
 // 0 -> admin 
@@ -19,7 +21,7 @@ const loginUsuario = async(req, res = response) => {
     const { correo, contrasenia } = req.params;
 
     try {
-        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 });
+        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 }).select('correo nombre apellido celular cambio_contrasenia cedula contrasenia calificacionConductor calificacionUsuario uid historialOrigen historialDestino');
         if (!usuario) {
             return res.status(404).json({
                 ok: false,
@@ -34,16 +36,16 @@ const loginUsuario = async(req, res = response) => {
             });
         }
         const token = await generarJWT(usuario.id);
-
         res.json({
             ok: true,
             usuario,
             token
         });
 
+
     } catch (error) {
 
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
@@ -85,8 +87,7 @@ const loginAdmin = async(req, res = response) => {
         });
 
     } catch (error) {
-
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
@@ -133,7 +134,7 @@ const olvidarContrasenia = async(req, res = response) => {
 
 
     } catch (error) {
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"

@@ -75,7 +75,7 @@ const buscarUsuario = async(req, res = response) => {
         });
 
     } catch (error) {
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'
@@ -301,7 +301,11 @@ const agregarServicio = async(req, res = response) => {
         if(creacionServicio.rs){
             let user = await Usuario.findById(req.uid);
             user.servicios.push( creacionServicio.msg);
-            user.features =  req.features;
+            user.historialDestino = req.body.historialDestino;
+            user.historialOrigen = req.body.historialOrigen;
+            log.info(JSON.stringify(req.historialOrigen));
+
+            log.info(JSON.stringify(user));
             await user.save();
             res.json({
                 ok: true,

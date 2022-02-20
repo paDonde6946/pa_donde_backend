@@ -77,7 +77,8 @@ router.post('/agregarServicio', [
     check('idAuxilioEconomico', 'El idAuxilioEconomico es obligatorio').notEmpty().isString(),
     check('distancia', 'El distancia es obligatorio').notEmpty().isString(),
     check('duracion', 'El duracion es obligatorio').notEmpty().isString(),
-    check('features', 'El features es obligatorio').notEmpty(),
+    check('historialOrigen', 'El historialOrigen es obligatorio').notEmpty(),
+    check('historialDestino', 'El historialDestino es obligatorio').notEmpty(),
     validarJWT,
     validarCampos
 ], agregarServicio);

@@ -9,6 +9,7 @@ const Vehiculo = require('../modelo/Vehiculo_modelo');
 const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 // Importacion de generador de contrasenia
 const { cifrarTexto, compararCifrado } = require('../ayudas/cifrado');
+const log = require('../utils/logger/logger');
 
 
 const cantidadUsuarios  = async(req, res = response) => {
@@ -20,7 +21,7 @@ const cantidadUsuarios  = async(req, res = response) => {
             msg: 'El numero de usuarios es: '
         });
     } catch (error) {
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
@@ -38,7 +39,7 @@ const cantidadVehiculos  = async(req, res = response) => {
             msg: 'El numero de vehiculos es: '
         });
     } catch (error) {
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
@@ -55,7 +56,7 @@ const cantidadConductores  = async(req, res = response) => {
             msg: 'El numero de conductores es: '
         });
     } catch (error) {
-        console.log(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
