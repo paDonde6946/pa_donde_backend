@@ -324,30 +324,6 @@ const agregarServicio = async(req, res = response) => {
     } 
 }
 
-const preAgregarServicio = async(req, res = response) => {
-
-    try {
-        
-        let uid = req.uid;
-        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos', null, { estado : Estado.Activo });
-        const auxilioEconomico = await AuxilioEconomico_modelo.find({ estado : Estado.Activo });
-        
-
-        res.json({
-            ok: true,
-            vehiculos: vehiculosBD.vehiculos,
-            auxilioEconomico
-        });
-
-    } catch (error) {
-        log.error(req.uid, req.body, req.params, req.query, error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el admin'
-        });
-    }
-}
-
 const separaCupo = async(req, res = response) => {
 
     try {
@@ -467,7 +443,6 @@ module.exports = {
     cambiarContraseniaAdmin,
     agregarServicio,
     listarVehiculosPorUid,
-    preAgregarServicio,
     separaCupo,
     darServiciosCreados,
     darServiciosPostulados,

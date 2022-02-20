@@ -13,11 +13,11 @@ const { darHistorial,
         actualizarUsuario, 
         agregarVehiculo, 
         listarVehiculosPorUid, 
-        preAgregarServicio, 
         separaCupo, 
         agregarServicio } = require('../controladores/usuario_controlador');
 
 const {actualizarVehciulo, cambiarEstadoVehciulo} = require('../controladores/vehiculo_controlador')
+const {listarAuxilioEconomico} = require('../controladores/auxilioEconomico_controlador')
 const router = Router();
 
 
@@ -59,11 +59,11 @@ router.delete('/eliminarVehiculo/:uid', [
     validarCampos
 ], cambiarEstadoVehciulo);
 
-// /app/preAgregarServicio
-router.get('/preAgregarServicio', [
+// /app/listarAuxilioEconomico
+router.get('/listarAuxilioEconomico', [
     validarCampos,
     validarJWT
-], preAgregarServicio);
+], listarAuxilioEconomico);
 
 
 // /app/agregarServicio
