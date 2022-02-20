@@ -334,23 +334,18 @@ const preAgregarServicio = async(req, res = response) => {
     try {
         
         let uid = req.uid;
-        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos.vehiculoId');
+        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos', null, { estado : Estado.Activo });
         const auxilioEconomico = await AuxilioEconomico_modelo.find({ estado : Estado.Activo });
-        let vehiculos = [];
-        (vehiculosBD.vehiculos).forEach(element => {
-            if(element.vehiculoId.estado == Estado.Activo){
-                vehiculos.push(element.vehiculoId);
-            }
-        });
+        
 
         res.json({
             ok: true,
-            vehiculos,
+            vehiculos: vehiculosBD.vehiculos,
             auxilioEconomico
         });
 
     } catch (error) {
-        console.error(error);
+        log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'
