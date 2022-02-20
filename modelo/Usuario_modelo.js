@@ -50,16 +50,15 @@ const Usuario = Schema({
     calificacionUsuario: {
         type: Number
     },
+    features:{
+    },
     vehiculos: [{
-        vehiculoId: {
-            type: Schema.Types.ObjectId,
-            ref: "Vehiculo"
-        }
+        type: Schema.Types.ObjectId,
+        ref: "Vehiculo"
     }],
     servicios: [{
-        servicioId: {
-            type: Schema.Types.ObjectId
-        }
+            type: Schema.Types.ObjectId,
+            ref: "Servicio"
     }]
 }, {
     timestamps: true

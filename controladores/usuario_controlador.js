@@ -10,11 +10,13 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 const { cifrarTexto } = require("../ayudas/cifrado")
 const { crearVehciulo } = require("../ayudas/cifrado");
 const Vehiculo = require('../modelo/Vehiculo_modelo');
-const Servicio = require('./servicio_controlador');
+const Servicio = require('../modelo/Servicio_modelo');
+const ServicioControlador = require('./servicio_controlador');
 const AuxilioEconomico_modelo = require('../modelo/AuxilioEconomico_modelo');
 const { Estado } = require('../utils/enums/estado_enum');
 const log = require('../utils/logger/logger');
-const VehiculosControlador = require('../controladores/vehiculo_controlador')
+const VehiculosControlador = require('../controladores/vehiculo_controlador');
+const { EstadoViaje } = require('../utils/enums/estadoViaje_enum');
 
 
 
@@ -299,12 +301,12 @@ const listarVehiculosPorUid = async(req, res = response) => {
 }
 
 const agregarServicio = async(req, res = response) => {
-    
     try {
-        const creacionServicio = await Servicio.crearServicio(req.body);
+        const creacionServicio = await ServicioControlador.crearServicio(req.body);
         if(creacionServicio.rs){
             let user = await Usuario.findById(req.uid);
-            user.servicios.push({servicioId : creacionServicio.msg}) 
+            user.servicios.push( creacionServicio.msg);
+            user.features =  req.features;
             await user.save();
             res.json({
                 ok: true,
@@ -359,7 +361,7 @@ const preAgregarServicio = async(req, res = response) => {
 const separaCupo = async(req, res = response) => {
 
     try {
-        const separacion = await Servicio.agregarCupo(req.uid, req.body.idServicio);
+        const separacion = await ServicioControlador.agregarCupo(req.uid, req.body.idServicio);
         if(separacion == true){
             res.json({
                 ok: true,
@@ -384,6 +386,82 @@ const separaCupo = async(req, res = response) => {
 
 }
 
+const darServiciosCreados = async(req, res = response) => {
+
+    try {
+        const uid = req.uid;
+        const servicios = await Usuario.findById(uid, 'servicios').populate('servicios', null, {$or : [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]},{ sort: { fechayhora: 1}});
+        res.json({
+            ok: true,
+            servicios: servicios.servicios
+        });
+        
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+
+}
+
+const darServiciosPostulados = async(req, res = response) => {
+
+    try {
+        const uid = req.uid;
+        const servicios = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}});
+        res.json({
+            ok: true,
+            servicios: servicios
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+
+}
+
+const darServiciosParaPostular = async(req, res = response) => {
+
+    try {
+        //  TODO
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+
+}
+
+const darHistorial = async(req, res = response) => {
+
+    try {
+        const uid = req.uid;
+        const serviciosComoConductor = await Usuario.findById(uid, 'servicios').populate('servicios', null, {estado: EstadoViaje.Finalizado},{ sort: { fechayhora: -1}});
+        const serviciosComoUsuario = await Servicio.find({'pasajeros.pasajero': uid , estado: EstadoViaje.Finalizado}, null, {sort: {fechayhora: -1}});
+        res.json({
+            ok: true,
+            serviciosComoConductor: serviciosComoConductor.servicios,
+            serviciosComoUsuario : serviciosComoUsuario.servicios
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    } 
+
+}
 
 
 
@@ -400,5 +478,8 @@ module.exports = {
     agregarServicio,
     listarVehiculosPorUid,
     preAgregarServicio,
-    separaCupo
+    separaCupo,
+    darServiciosCreados,
+    darServiciosPostulados,
+    darHistorial
 }

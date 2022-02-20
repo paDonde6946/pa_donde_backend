@@ -6,7 +6,16 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { cambiarContrasenia, actualizarUsuario, agregarVehiculo, listarVehiculosPorUid, preAgregarServicio, separaCupo, agregarServicio } = require('../controladores/usuario_controlador');
+const { darHistorial,
+        darServiciosPostulados,
+        darServiciosCreados, 
+        cambiarContrasenia, 
+        actualizarUsuario, 
+        agregarVehiculo, 
+        listarVehiculosPorUid, 
+        preAgregarServicio, 
+        separaCupo, 
+        agregarServicio } = require('../controladores/usuario_controlador');
 
 const {actualizarVehciulo, cambiarEstadoVehciulo} = require('../controladores/vehiculo_controlador')
 const router = Router();
@@ -68,8 +77,9 @@ router.post('/agregarServicio', [
     check('idAuxilioEconomico', 'El idAuxilioEconomico es obligatorio').notEmpty().isString(),
     check('distancia', 'El distancia es obligatorio').notEmpty().isString(),
     check('duracion', 'El duracion es obligatorio').notEmpty().isString(),
-    validarCampos,
-    validarJWT
+    check('features', 'El features es obligatorio').notEmpty(),
+    validarJWT,
+    validarCampos
 ], agregarServicio);
 
 // /app/separaCupo
@@ -85,5 +95,23 @@ router.post('/actualizarVehiculo/:uid', [
     validarJWT
 ], actualizarVehciulo);
 
+
+// /app/darServiciosCreados
+router.get('/darServiciosCreados', [
+    validarCampos,
+    validarJWT
+], darServiciosCreados);
+
+// /app/darServiciosCreados
+router.get('/darServiciosPostulados', [
+    validarCampos,
+    validarJWT
+], darServiciosPostulados);
+
+// /app/darHistorial
+router.get('/darHistorial', [
+    validarCampos,
+    validarJWT
+], darHistorial);
 
 module.exports = router;
