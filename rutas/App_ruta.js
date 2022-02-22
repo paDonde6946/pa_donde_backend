@@ -28,9 +28,9 @@ router.post('/cambiarContrasenia', [
 ], cambiarContrasenia);
 
 router.post('/actualizarPerfil', [
-    check('nombre', 'El nombre es obligatorio').notEmpty(),
-    check('apellido', 'El apellido es obligatorio').notEmpty(),
-    check('celular', 'El celular es obligatorio').notEmpty(),
+    check('nombre', 'El nombre es obligatorio'),
+    check('apellido', 'El apellido es obligatorio'),
+    check('celular', 'El celular es obligatorio'),
     validarCampos,
     validarJWT
 ], actualizarUsuario);
