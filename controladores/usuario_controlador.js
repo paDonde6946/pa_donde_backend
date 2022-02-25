@@ -360,7 +360,7 @@ const darServiciosCreados = async(req, res = response) => {
 
     try {
         const uid = req.uid;
-        const servicios = await Usuario.findById(uid, 'servicios').populate('servicios', null, {$or : [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]},{ sort: { fechayhora: 1}});
+        const servicios = await Usuario.findById(uid, 'servicios').populate('servicios', null, {$or : [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]},{ sort: { fechayhora: 1}}).populate('servicios.pasajeros.pasajero');
         res.json({
             ok: true,
             servicios: servicios.servicios
