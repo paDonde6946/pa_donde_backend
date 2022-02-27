@@ -417,10 +417,11 @@ const darHistorial = async(req, res = response) => {
         const uid = req.uid;
         const serviciosComoConductor = await Usuario.findById(uid, 'servicios').populate('servicios', null, {estado: EstadoViaje.Finalizado},{ sort: { fechayhora: -1}});
         const serviciosComoUsuario = await Servicio.find({'pasajeros.pasajero': uid , estado: EstadoViaje.Finalizado}, null, {sort: {fechayhora: -1}});
+        console.log(serviciosComoUsuario.servicios);
         res.json({
             ok: true,
-            serviciosComoConductor: serviciosComoConductor.servicios,
-            serviciosComoUsuario : serviciosComoUsuario.servicios
+            serviciosComoConductor: (serviciosComoConductor.servicios == undefined) ?  [] : serviciosComoConductor.servicios,
+            serviciosComoUsuario : (serviciosComoUsuario.servicios == undefined) ?  [] : serviciosComoUsuario.servicios
         });
 
     } catch (error) {
