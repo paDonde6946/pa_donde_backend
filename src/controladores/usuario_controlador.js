@@ -15,7 +15,7 @@ const ServicioControlador = require('./servicio_controlador');
 const AuxilioEconomico_modelo = require('../modelo/AuxilioEconomico_modelo');
 const { Estado } = require('../utils/enums/estado_enum');
 const log = require('../utils/logger/logger');
-const VehiculosControlador = require('../controladores/vehiculo_controlador');
+const VehiculosControlador = require('./vehiculo_controlador');
 const { EstadoViaje } = require('../utils/enums/estadoViaje_enum');
 
 

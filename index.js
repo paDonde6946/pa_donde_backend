@@ -1,7 +1,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
-const log = require('./utils/logger/logger');
+const log = require('./src/utils/logger/logger');
 
 
 //TODO AVERIGUAR PARA QUE SIRVE
@@ -9,7 +9,7 @@ const log = require('./utils/logger/logger');
 require('dotenv').config();
 
 // DB Config
-const { dbConnection } = require('./basedatos/configuracion');
+const { dbConnection } = require('./src/basedatos/configuracion');
 dbConnection();
 
 
@@ -27,7 +27,7 @@ const servidor = require('http').createServer(app);
 
 // Servicio de socket
 module.exports.io = require('socket.io')(servidor);
-require('./sockets/socket');
+require('./src/sockets/socket');
 
 // Path publico
 const publicoPath = path.resolve(__dirname, 'public');
@@ -35,18 +35,18 @@ app.use(express.static(publicoPath));
 
 
 // Rutas Movil 
-app.use('/app/login', require('./rutas/SesionApp_ruta'));
+app.use('/app/login', require('./src/rutas/SesionApp_ruta'));
 
 
 // Ruta Web
-app.use('/web/login', require('./rutas/SesionApp_ruta'));
+app.use('/web/login', require('./src/rutas/SesionApp_ruta'));
 
 
 // Ruta Usuiario Web
-app.use('/web', require('./rutas/Web_rutas'));
+app.use('/web', require('./src/rutas/Web_rutas'));
 
 // Ruta Usuiario Movil 
-app.use('/app', require('./rutas/App_ruta'));
+app.use('/app', require('./src/rutas/App_ruta'));
 
 
 servidor.listen(process.env.PORT, (err) => {

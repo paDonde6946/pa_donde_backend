@@ -1,5 +1,5 @@
 const { comprobarJWT } = require('../ayudas/jwt');
-const { io } = require('../index');
+const { io } = require('../../index');
 
 //Mensaje de sockets 
 io.on('connection', client => {
