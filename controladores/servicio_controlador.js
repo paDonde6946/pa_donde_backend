@@ -72,8 +72,8 @@ const agregarCupo = async(uidUsuario, idServicio) => {
     try {
         const servicioSeleccionado  = await Servicio.findById(idServicio);
         if(servicioSeleccionado.cantidadCupos > servicioSeleccionado.pasajeros.length){
-            servicioSeleccionado.pasajeros.push({pasajero: uidUsuario});
-            servicioSeleccionado.save();
+            servicioSeleccionado.pasajeros.push({pasajero: uidUsuario})
+            await servicioSeleccionado.save();
             return true;
         }else{
             return "Lo sentimos no hay cupos.";
@@ -81,12 +81,46 @@ const agregarCupo = async(uidUsuario, idServicio) => {
     } catch (error) {
         return error;
     }
+}
 
+const quitarCupo = async(uidUsuario, idServicio) => {
+    try {
+        const servicioSeleccionado  = await Servicio.findById(idServicio);
+        let nuevoArreglo = servicioSeleccionado.pasajeros.filter( (item) => item.pasajero != uidUsuario);
+        servicioSeleccionado.pasajeros = nuevoArreglo;
+        await servicioSeleccionado.save();
+        return true;
+
+    } catch (error) {
+        return error;
+    }
+}
+
+const editarServicio = async(uidServicio, data) => {
+    try {
+        await Servicio.findByIdAndUpdate(uidServicio , data);
+        return true;
+    } catch (error) {
+        return error;
+    }
+}
+
+
+const eliminarServicio = async(uidServicio) => {
+    try {
+        await Servicio.findByIdAndDelete(uidServicio);
+        return true;
+    } catch (error) {
+        return error;
+    }
 }
 
 module.exports  = {
     crearServicio,
     traerTodosServicios,
     cambiarEstadoServicio,
-    agregarCupo
+    agregarCupo,
+    quitarCupo,
+    editarServicio,
+    eliminarServicio
 }

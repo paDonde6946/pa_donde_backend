@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketServer</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+    <form action='http://localhost:3001/app/cargarLicenciaConduccion' method="POST" enctype="multipart/form-data">
+        Tipo Documento
+        <input type="text" name="tipoDocumento"> 
+        <input type="file" name="file">
+        <input type="submit" value="Subir">
+    </form>
+
+
+    <!-- <script src="socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('conectado al servidor');
+        });
+
+
+        socket.emit('grabarMensaje', {
+            de: "60d541f169da2a24f5b5bdd3",
+            para: "60d5420569da2a24f5b5bdd7",
+            mensaje: "Ejemplo 2",
+            servicio: "60d5422f69da2a24f5b5bdde"
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Perdimos la comunicacion con el servidor');
+        });
+    </script> -->
+
+
+</body>
+
+</html>

@@ -331,7 +331,8 @@ const agregarServicio = async(req, res = response) => {
 const separaCupo = async(req, res = response) => {
 
     try {
-        const separacion = await ServicioControlador.agregarCupo(req.uid, req.body.idServicio);
+        let separacion = await ServicioControlador.agregarCupo(req.uid, req.body.idServicio);
+
         if(separacion == true){
             res.json({
                 ok: true,
@@ -396,11 +397,26 @@ const darServiciosPostulados = async(req, res = response) => {
 
 }
 
-const darServiciosParaPostular = async(req, res = response) => {
+const darServiciosDisponibles = async(req, res = response) => {
 
     try {
-        //  TODO
+        const uid = req.uid;
+        const serviciosPostulados = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, 'uid', {sort: {fechayhora: 1}});
+        const serviciosPropios = await Usuario.findById(uid, 'servicios').populate('servicios', uid, {$or : [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]},{ sort: { fechayhora: 1}});
+        const serviciosExcluidos = [];
+        serviciosPostulados.forEach(element => {
+            serviciosExcluidos.push(element);
+        });
+        serviciosPropios.servicios.forEach(element => {
+            serviciosExcluidos.push(element);
+        });
 
+        const serviciosDisponibles = await Servicio.find({$nor: serviciosExcluidos , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
+
+        res.json({
+            ok: true,
+            servicios: serviciosDisponibles
+        });
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
@@ -434,6 +450,84 @@ const darHistorial = async(req, res = response) => {
 
 }
 
+const eliminarServicio = async(req, res = response) => {
+    try {
+
+        const uid = req.uid;
+        const { uidServicio } = req.params;
+        let eliminarEnServicio = ServicioControlador.eliminarServicio(uidServicio);
+        const usuario = await Usuario.findById(uid);
+        usuario.servicios = usuario.servicios.filter( (item) => item != uidServicio);
+        usuario.save();
+        res.json({
+            ok: true,
+            msg: 'Su servicio se elimino correctamente'
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+
+}
+
+const editarServicio = async(req, res = response) => {
+    try {
+        const uid = req.uid;
+        const { uidServicio } = req.params;
+        let editar = ServicioControlador.editarServicio(uidServicio, req.body);
+        if( editar =! true){
+            log.error(req.uid, req.body, req.params, req.query, quitarCupo);
+            res.json({
+                ok: false,
+                msg: 'Intente mas tarde'
+            });   
+        }
+        res.json({
+            ok: true,
+            msg: 'Su servicio se edito correctamente.'
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
+
+const desPostularse = async(req, res = response) => {
+
+    try {
+        const uid = req.uid;
+        const { uidServicio } = req.body;
+        let quitarCupo = ServicioControlador.quitarCupo(uid, uidServicio);
+        if( quitarCupo =! true){
+            log.error(req.uid, req.body, req.params, req.query, quitarCupo);
+            res.json({
+                ok: false,
+                msg: 'Intente mas tarde'
+            });        
+        }
+    
+        res.json({
+            ok: true,
+            msg: 'Tu cupo se ha liberado correctamente'
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+
+}
 
 
 module.exports = {
@@ -451,5 +545,9 @@ module.exports = {
     separaCupo,
     darServiciosCreados,
     darServiciosPostulados,
-    darHistorial
+    darServiciosDisponibles,
+    darHistorial,
+    desPostularse,
+    editarServicio,
+    eliminarServicio
 }

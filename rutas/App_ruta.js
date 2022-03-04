@@ -14,10 +14,16 @@ const { darHistorial,
         agregarVehiculo, 
         listarVehiculosPorUid, 
         separaCupo, 
-        agregarServicio } = require('../controladores/usuario_controlador');
+        agregarServicio,
+        desPostularse,
+        editarServicio,
+        eliminarServicio,
+        darServiciosDisponibles } = require('../controladores/usuario_controlador');
 
 const {actualizarVehciulo, cambiarEstadoVehciulo} = require('../controladores/vehiculo_controlador')
 const {listarAuxilioEconomico} = require('../controladores/auxilioEconomico_controlador')
+const { obtenerChat, grabarMensaje } = require('../controladores/mensajes_controlador');
+const { cargarArchivo } = require('../controladores/archivos_contolador');
 const router = Router();
 
 
@@ -109,10 +115,56 @@ router.get('/darServiciosPostulados', [
     validarJWT
 ], darServiciosPostulados);
 
+// /app/darServiciosDisponibles
+router.get('/darServiciosDisponibles', [
+    validarCampos,
+    validarJWT
+], darServiciosDisponibles);
+
 // /app/darHistorial
 router.get('/darHistorial', [
     validarCampos,
     validarJWT
 ], darHistorial);
+
+// /app/obtenerChat
+router.get('/obtenerChat', [
+    check('para', 'El para es obligatorio').notEmpty(),
+    check('servicio', 'El servicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], obtenerChat);
+
+// /app/darHistorial
+router.post('/grabarMensaje', [
+    validarCampos,
+    validarJWT
+], grabarMensaje);
+
+// /app/cargarLicenciaConduccion
+router.post('/cargarLicenciaConduccion', [
+    check('tipoDocumento', 'El tipoDocumento es obligatorio').notEmpty(),
+    validarCampos,
+], cargarArchivo);
+
+// /app/desPostularse
+router.post('/desPostularse', [
+    check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], desPostularse);
+
+// /app/editarServicio
+router.put('/editarServicio/:uidServicio', [
+    validarCampos,
+    validarJWT
+], editarServicio);
+
+// /app/eliminarServicio
+router.delete('/eliminarServicio/:uidServicio', [
+    validarCampos,
+    validarJWT
+], eliminarServicio);
+
 
 module.exports = router;

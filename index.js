@@ -25,6 +25,10 @@ app.use(fileUpload());
 // Servidor de node
 const servidor = require('http').createServer(app);
 
+// Servicio de socket
+module.exports.io = require('socket.io')(servidor);
+require('./sockets/socket');
+
 // Path publico
 const publicoPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicoPath));
