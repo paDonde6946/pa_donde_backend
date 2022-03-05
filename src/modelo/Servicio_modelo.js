@@ -26,7 +26,8 @@ const Servicio = Schema({
     },
     pasajeros : [{
         pasajero : {
-            type: Schema.Types.ObjectId
+            type: Schema.Types.ObjectId,
+            ref: "Usuario"
         },
         puntuacionPasajero : {
             type : Number
@@ -34,6 +35,7 @@ const Servicio = Schema({
     }],
     idVehiculo :{
         type: Schema.Types.ObjectId,
+        ref: "Vehiculo",
         require: true,
     },
     cantidadCupos :{
@@ -50,7 +52,8 @@ const Servicio = Schema({
     },
     idAuxilioEconomico: {
         require: true,
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: "AuxilioEconomico"
     },
     estado : {
         type : Number,
