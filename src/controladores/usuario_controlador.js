@@ -368,7 +368,7 @@ const darServiciosCreados = async(req, res = response) => {
                 populate: {
                   path: 'pasajeros.pasajero',
                   select: 'nombre' 
-                } 
+                }
             }).sort({'servicios.fechayhora': 1});
 
         res.json({

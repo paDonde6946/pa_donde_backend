@@ -51,5 +51,8 @@ app.use('/app', require('./src/rutas/App_ruta'));
 
 servidor.listen(process.env.PORT, (err) => {
     if (err) throw new Error(err);
+    console.log("Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    console.log('Servidor correindo en puerto '+ process.env.PORT);
+
     log.info('Servidor correindo en puerto '+ process.env.PORT );
 });
