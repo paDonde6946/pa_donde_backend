@@ -419,9 +419,12 @@ const darServiciosDisponibles = async(req, res = response) => {
         serviciosPropios.servicios.forEach(element => {
             serviciosExcluidos.push(element);
         });
-
-        const serviciosDisponibles = await Servicio.find({$nor: serviciosExcluidos , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
-
+        let serviciosDisponibles =[];
+        if(serviciosExcluidos.length == 0){
+            serviciosDisponibles = await Servicio.find({$or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
+        }else{
+            serviciosDisponibles = await Servicio.find({$nor: serviciosExcluidos , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
+        }
         res.json({
             ok: true,
             servicios: serviciosDisponibles
