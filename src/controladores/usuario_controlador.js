@@ -371,6 +371,16 @@ const darServiciosCreados = async(req, res = response) => {
                 }
             }).sort({'servicios.fechayhora': 1});
 
+        let pasajeros = [];
+
+        // servicios.pasajeros.forEach(element => {
+        //     pasajeros.push({
+        //         pasajero: element.pasajero._id,
+        //         nombre:element.pasajero.nombre
+        //     })
+        // });
+        // servicios.pasajeros = pasajeros;
+
         res.json({
             ok: true,
             servicios: servicios.servicios
@@ -390,7 +400,8 @@ const darServiciosPostulados = async(req, res = response) => {
 
     try {
         const uid = req.uid;
-        const servicios = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}});
+        const servicios = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}})
+        .populate('pasajeros.pasajero', 'nombre');
         res.json({
             ok: true,
             servicios: servicios
