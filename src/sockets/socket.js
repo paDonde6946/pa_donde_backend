@@ -14,9 +14,9 @@ io.on('connection', client => {
     // client.join(uid);
 
     // Se desconecta
-    // client.on('disconnect', () => {
-    //     console.log('Cliente desconectado');
-    // });
+    client.on('disconnect', () => {
+        console.log('Cliente desconectado');
+    });
 
     // // Realiza la peticion de las postulaciones que tiene que hacer
     // client.on('darMisPostulaciones', async(payload) => {

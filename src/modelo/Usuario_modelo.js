@@ -65,7 +65,27 @@ const Usuario = Schema({
     servicios: [{
             type: Schema.Types.ObjectId,
             ref: "Servicio"
-    }]
+    }],
+    ultimoServicioSinCalificar:{
+        type: Schema.Types.ObjectId,
+        ref: "Servicio"
+    },
+    numServiciosAdquiridos:{
+        type: Number,
+        default: 0
+    },
+    numServiciosHechos: {
+        type: Number,
+        default: 0    
+    },
+    sumatoriaCalificacionConductor: {
+        type: Number,
+        default: 0
+    },
+    sumatoriaCalificacionPasajero: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true
 });

@@ -18,7 +18,10 @@ const { darHistorial,
         desPostularse,
         editarServicio,
         eliminarServicio,
-        darServiciosDisponibles } = require('../controladores/usuario_controlador');
+        darServiciosDisponibles,
+        calificarPasajero,
+        calificarConductor,
+        finalizarServicio } = require('../controladores/usuario_controlador');
 
 const {actualizarVehciulo, cambiarEstadoVehciulo} = require('../controladores/vehiculo_controlador')
 const {listarAuxilioEconomico} = require('../controladores/auxilioEconomico_controlador')
@@ -165,6 +168,29 @@ router.delete('/eliminarServicio/:uidServicio', [
     validarCampos,
     validarJWT
 ], eliminarServicio);
+
+// /app/calificarConductor
+router.post('/calificarConductor', [
+    check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], calificarConductor);
+
+
+// /app/calificarPasajero
+router.post('/calificarPasajero', [
+    check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    check('uidPasajero', 'El uidServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], calificarPasajero);
+
+// /app/finalizarServicio
+router.post('/finalizarServicio', [
+    check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], finalizarServicio);
 
 
 module.exports = router;

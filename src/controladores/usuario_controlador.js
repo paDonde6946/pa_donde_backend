@@ -552,6 +552,71 @@ const desPostularse = async(req, res = response) => {
 
 }
 
+const calificarPasajero = async(req, res = response) =>{
+    try {
+        res.json({
+            ok: true,
+            msg: 'Gracias por tu calificacion'
+        });  
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
+const calificarConductor = async(req, res = response) =>{
+    try {
+        const { uidServicio } = req.body;
+        const usuario = await Usuario.find({servicios : uidServicio});
+        usuario.num
+        res.json({
+            ok: true,
+            msg: 'Gracias por tu calificacion',
+            kok:usuario
+        });  
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
+const finalizarServicio = async(req, res = response) =>{
+    try {
+
+        const uid = req.uid;
+        const { uidServicio } = req.body;
+        const servicio = await Servicio.findById(uidServicio);
+
+        servicio.pasajeros.forEach(async element => {
+            const usuario = await Usuario.findById(element.pasajero);
+            usuario.ultimoServicioSinCalificar = uidServicio;
+            usuario.numServiciosAdquiridos = usuario.numServiciosAdquiridos + 1; 
+            usuario.save();
+        });
+        
+        servicio.estado = EstadoViaje.Finalizado;
+        servicio.save();
+        const usuario = await Usuario.findById(uid);
+        usuario.numServiciosHechos = usuario.numServiciosHechos + 1;
+        usuario.save(); 
+
+        res.json({
+            ok: true,
+            msg: 'Servicio finalizado correctamente'
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
 
 module.exports = {
     crearUsuario,
@@ -572,5 +637,8 @@ module.exports = {
     darHistorial,
     desPostularse,
     editarServicio,
-    eliminarServicio
+    eliminarServicio,
+    calificarPasajero,
+    calificarConductor,
+    finalizarServicio
 }
