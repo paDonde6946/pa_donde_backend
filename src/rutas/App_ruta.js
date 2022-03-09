@@ -21,7 +21,8 @@ const { darHistorial,
         darServiciosDisponibles,
         calificarPasajero,
         calificarConductor,
-        finalizarServicio } = require('../controladores/usuario_controlador');
+        finalizarServicio,
+        iniciarServicio } = require('../controladores/usuario_controlador');
 
 const {actualizarVehciulo, cambiarEstadoVehciulo} = require('../controladores/vehiculo_controlador')
 const {listarAuxilioEconomico} = require('../controladores/auxilioEconomico_controlador')
@@ -192,5 +193,11 @@ router.post('/finalizarServicio', [
     validarJWT
 ], finalizarServicio);
 
+// /app/iniciarServicio
+router.post('/iniciarServicio', [
+    check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    validarCampos,
+    validarJWT
+], iniciarServicio);
 
 module.exports = router;

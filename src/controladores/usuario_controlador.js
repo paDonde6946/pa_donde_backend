@@ -568,14 +568,26 @@ const calificarPasajero = async(req, res = response) =>{
 }
 const calificarConductor = async(req, res = response) =>{
     try {
-        const { uidServicio } = req.body;
-        const usuario = await Usuario.find({servicios : uidServicio});
-        usuario.num
+        const uid = req.uid;
+        const { uidServicio, calificacion } = req.body;
+        const usuario = await Usuario.find({ servicios : uidServicio});
+        usuario.sumatoriaCalificacionConductor = usuario.sumatoriaCalificacionConductor + calificacion;
+        usuario.calificacionConductor = usuario.sumatoriaCalificacionConductor / usuario.numServiciosHechos;
+        await usuario.save();
+
+        const servicio = await Servicio.findById(uidServicio);
+        servicio.pasajeros.forEach(element => {
+            if(element.pasajero == uid){
+                element.calificacion = calificacion;
+            }
+        });
+        servicio.save();
+
         res.json({
             ok: true,
-            msg: 'Gracias por tu calificacion',
-            kok:usuario
+            msg: 'Gracias por tu calificacion'
         });  
+
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
@@ -597,7 +609,7 @@ const finalizarServicio = async(req, res = response) =>{
             usuario.numServiciosAdquiridos = usuario.numServiciosAdquiridos + 1; 
             usuario.save();
         });
-        
+
         servicio.estado = EstadoViaje.Finalizado;
         servicio.save();
         const usuario = await Usuario.findById(uid);
@@ -609,6 +621,24 @@ const finalizarServicio = async(req, res = response) =>{
             msg: 'Servicio finalizado correctamente'
         });
 
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        });
+    }
+}
+
+const iniciarServicio = async(req, res = response) =>{
+    try {
+        const {uidServicio} = req.body;
+        const servicio = await Servicio.findByIdAndUpdate(uidServicio, {estado: EstadoViaje.Camino});
+        //TODO: Toca enviar la notificacion push
+        res.json({
+            ok: true,
+            msg: 'Su servicio a iniciado correctamente'
+        });
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
@@ -640,5 +670,6 @@ module.exports = {
     eliminarServicio,
     calificarPasajero,
     calificarConductor,
-    finalizarServicio
+    finalizarServicio,
+    iniciarServicio
 }
