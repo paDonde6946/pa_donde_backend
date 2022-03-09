@@ -570,7 +570,9 @@ const calificarConductor = async(req, res = response) =>{
     try {
         const uid = req.uid;
         const { uidServicio, calificacion } = req.body;
-        const usuario = await Usuario.find({ servicios : uidServicio});
+        const usuarios = await Usuario.find({ servicios : uidServicio});
+        let uidUsuario = usuarios[0]._id; 
+        const usuario = await Usuario.findById(uidUsuario);
         usuario.sumatoriaCalificacionConductor = usuario.sumatoriaCalificacionConductor + calificacion;
         usuario.calificacionConductor = usuario.sumatoriaCalificacionConductor / usuario.numServiciosHechos;
         await usuario.save();
@@ -578,10 +580,10 @@ const calificarConductor = async(req, res = response) =>{
         const servicio = await Servicio.findById(uidServicio);
         servicio.pasajeros.forEach(element => {
             if(element.pasajero == uid){
-                element.calificacion = calificacion;
+                element.puntuacionConductor = calificacion;
             }
         });
-        servicio.save();
+        await servicio.save();
 
         res.json({
             ok: true,

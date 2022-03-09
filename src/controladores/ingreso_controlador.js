@@ -21,7 +21,7 @@ const loginUsuario = async(req, res = response) => {
     const { correo, contrasenia } = req.params;
 
     try {
-        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 }).select('correo nombre apellido celular cambio_contrasenia cedula contrasenia calificacionConductor calificacionUsuario uid historialOrigen historialDestino');
+        const usuario = await Usuario.findOne({ correo, tipoUsuario: 1 }).select('correo nombre apellido celular cambio_contrasenia cedula contrasenia calificacionConductor calificacionUsuario uid historialOrigen historialDestino ultimoServicioSinCalificar');
         if (!usuario) {
             return res.status(404).json({
                 ok: false,

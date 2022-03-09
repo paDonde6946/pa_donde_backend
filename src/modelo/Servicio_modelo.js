@@ -31,6 +31,9 @@ const Servicio = Schema({
         },
         puntuacionPasajero : {
             type : Number
+        },
+        puntuacionConductor:{
+            type : Number
         }
     }],
     idVehiculo :{
