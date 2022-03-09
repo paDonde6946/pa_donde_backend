@@ -173,6 +173,7 @@ router.delete('/eliminarServicio/:uidServicio', [
 // /app/calificarConductor
 router.post('/calificarConductor', [
     check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
+    check('calificacion', 'El calificacion es obligatorio').notEmpty(),
     validarCampos,
     validarJWT
 ], calificarConductor);
@@ -182,6 +183,7 @@ router.post('/calificarConductor', [
 router.post('/calificarPasajero', [
     check('uidServicio', 'El uidServicio es obligatorio').notEmpty(),
     check('uidPasajero', 'El uidServicio es obligatorio').notEmpty(),
+    check('calificacion', 'El calificacion es obligatorio').notEmpty(),
     validarCampos,
     validarJWT
 ], calificarPasajero);

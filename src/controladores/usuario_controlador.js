@@ -554,6 +554,22 @@ const desPostularse = async(req, res = response) => {
 
 const calificarPasajero = async(req, res = response) =>{
     try {
+        const { uidServicio, uidPasajero, calificacion } = req.body;
+
+        const servicio = await Servicio.findById(uidServicio);
+
+        servicio.pasajeros.forEach(element => {
+            if(element.pasajero == uidPasajero){
+                element.puntuacionPasajero = calificacion;
+            }
+        });
+        await servicio.save();
+
+        const usuario = await Usuario.findById(uidPasajero);
+        usuario.sumatoriaCalificacionPasajero = usuario.sumatoriaCalificacionPasajero + calificacion;
+        usuario.calificacionUsuario = usuario.sumatoriaCalificacionPasajero / usuario.numServiciosAdquiridos;
+        await usuario.save();
+
         res.json({
             ok: true,
             msg: 'Gracias por tu calificacion'
@@ -584,6 +600,7 @@ const calificarConductor = async(req, res = response) =>{
             }
         });
         await servicio.save();
+        await Usuario.findByIdAndUpdate(uid, {ultimoServicioSinCalificar: null});
 
         res.json({
             ok: true,
