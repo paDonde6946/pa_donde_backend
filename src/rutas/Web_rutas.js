@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio } = require('../controladores/usuario_controlador');
+const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula } = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
 const { traerTodosServicios, cambiarEstadoServicio } = require('../controladores/servicio_controlador');
 const { cantidadUsuarios, cantidadVehiculos, cantidadConductores } = require('../controladores/dashboard_controlador');
@@ -25,6 +25,12 @@ router.get('/usuario/traerUsuario/:uid', [
     validarCampos,
     validarJWT
 ], buscarUsuario);
+
+router.get('/usuario/traerUsuarioXCedula/:cedula', [
+    check('cedula', 'La cedula es obligatorio').not().isEmpty(),
+    validarCampos,
+    validarJWT
+], buscarUsuarioCedula);
 
 router.post('/usuario/cambiarEstadoUsuario', [
     check('uid', 'El uid es obligatorio').not().isEmpty(),
@@ -55,7 +61,7 @@ router.post('/vehiculos/agregarVehiculo', [
     check('marca', 'El marca es obligatorio').notEmpty().isString(),
     check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
     check('modelo', 'El modelo es obligatorio').notEmpty().isString(),
-    check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
+    // check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
     validarCampos,
     validarJWT
 ], agregarVehiculo);
@@ -66,18 +72,18 @@ router.get('/vehiculos/listarVehiculos', [
     validarJWT
 ], traerVehciulos);
 
-router.put('/vehiculos/cambiarEstado/:uid' , [
+router.put('/vehiculos/cambiarEstado/:uid', [
     validarCampos,
     validarJWT
 ], cambiarEstadoVehciulo);
 
 
-router.put('/vehiculos/actualizarVehiculo/:uid' , [
+router.put('/vehiculos/actualizarVehiculo/:uid', [
     validarCampos,
     validarJWT
 ], actualizarVehciulo);
 
-router.get('/vehiculos/buscarVehiculo/:placa' , [
+router.get('/vehiculos/buscarVehiculo/:placa', [
     validarCampos,
     validarJWT
 ], buscarVehiculoPorPlaca)
@@ -87,7 +93,7 @@ router.get('/servicio/listarServicio', [
     validarJWT
 ], traerTodosServicios);
 
-router.put('/servicio/cambiarEstado/:uid' , [
+router.put('/servicio/cambiarEstado/:uid', [
     validarCampos,
     validarJWT
 ], cambiarEstadoServicio);

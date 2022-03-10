@@ -83,6 +83,33 @@ const buscarUsuario = async(req, res = response) => {
     }
 }
 
+const buscarUsuarioCedula = async(req, res = response) => {
+
+    try {
+        const { cedula } = req.params;
+        const usuario = await Usuario.find({cedula: cedula});
+
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe el usuario'
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuario
+        });
+
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
 const traerTodosUsuarios = async(req, res = response) => {
 
     try {
@@ -690,5 +717,6 @@ module.exports = {
     calificarPasajero,
     calificarConductor,
     finalizarServicio,
-    iniciarServicio
+    iniciarServicio,
+    buscarUsuarioCedula
 }
