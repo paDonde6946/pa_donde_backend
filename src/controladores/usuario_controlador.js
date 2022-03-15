@@ -443,7 +443,6 @@ const darServiciosPostulados = async (req, res = response) => {
 
     try {
         const uid = req.uid;
-<<<<<<< HEAD
         const serviciosAux = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}})
         .populate('pasajeros.pasajero', 'nombre');
         var servicios = [];
@@ -471,11 +470,6 @@ const darServiciosPostulados = async (req, res = response) => {
         }
 
       res.json({
-=======
-        const servicios = await Servicio.find({ 'pasajeros.pasajero': uid, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
-            .populate('pasajeros.pasajero', 'nombre');
-        res.json({
->>>>>>> 73643a184b6fdc2ddea75bff74db40d2dc1bd05a
             ok: true,
             servicios: servicios
         });
