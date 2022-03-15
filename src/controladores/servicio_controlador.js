@@ -5,20 +5,20 @@ const Servicio = require('../modelo/Servicio_modelo');
 const Usuario = require('../modelo/Usuario_modelo');
 
 
-const crearServicio = async(data) => {
+const crearServicio = async (data) => {
 
     try {
 
         let servicio = await Servicio.create(data);
-        return { msg: servicio._id, rs: true};
-        
+        return { msg: servicio._id, rs: true };
+
     } catch (error) {
-        return { msg: error, rs: false}; 
+        return { msg: error, rs: false };
     }
 
 }
 
-const traerTodosServicios = async(req, res = response) => {
+const traerTodosServicios = async (req, res = response) => {
 
     try {
         const listaServicio = await Servicio.find();
@@ -36,7 +36,7 @@ const traerTodosServicios = async(req, res = response) => {
     }
 }
 
-const cambiarEstadoServicio = async(req, res = response) => {
+const cambiarEstadoServicio = async (req, res = response) => {
 
     try {
         const { uid } = req.body;
@@ -51,6 +51,10 @@ const cambiarEstadoServicio = async(req, res = response) => {
 
         if (servicio.estado == 1) {
             servicio.estado = 2;
+        } else if (servicio.estado == 2) {
+            servicio.estado = 3;
+        } else if (servicio.estado ==3){
+            servicio.estado = 4;
         } else {
             servicio.estado = 1;
         }
@@ -68,15 +72,15 @@ const cambiarEstadoServicio = async(req, res = response) => {
     }
 }
 
-const agregarCupo = async(uidUsuario, idServicio) => {
+const agregarCupo = async (uidUsuario, idServicio) => {
 
     try {
-        const servicioSeleccionado  = await Servicio.findById(idServicio);
-        if(servicioSeleccionado.cantidadCupos > servicioSeleccionado.pasajeros.length){
-            servicioSeleccionado.pasajeros.push({pasajero: uidUsuario})
+        const servicioSeleccionado = await Servicio.findById(idServicio);
+        if (servicioSeleccionado.cantidadCupos > servicioSeleccionado.pasajeros.length) {
+            servicioSeleccionado.pasajeros.push({ pasajero: uidUsuario })
             await servicioSeleccionado.save();
             return true;
-        }else{
+        } else {
             return "Lo sentimos no hay cupos.";
         }
     } catch (error) {
@@ -84,10 +88,10 @@ const agregarCupo = async(uidUsuario, idServicio) => {
     }
 }
 
-const quitarCupo = async(uidUsuario, idServicio) => {
+const quitarCupo = async (uidUsuario, idServicio) => {
     try {
-        const servicioSeleccionado  = await Servicio.findById(idServicio);
-        let nuevoArreglo = servicioSeleccionado.pasajeros.filter( (item) => item.pasajero != uidUsuario);
+        const servicioSeleccionado = await Servicio.findById(idServicio);
+        let nuevoArreglo = servicioSeleccionado.pasajeros.filter((item) => item.pasajero != uidUsuario);
         servicioSeleccionado.pasajeros = nuevoArreglo;
         await servicioSeleccionado.save();
         return true;
@@ -97,9 +101,9 @@ const quitarCupo = async(uidUsuario, idServicio) => {
     }
 }
 
-const editarServicio = async(uidServicio, data) => {
+const editarServicio = async (uidServicio, data) => {
     try {
-        await Servicio.findByIdAndUpdate(uidServicio , data);
+        await Servicio.findByIdAndUpdate(uidServicio, data);
         return true;
     } catch (error) {
         return error;
@@ -107,7 +111,7 @@ const editarServicio = async(uidServicio, data) => {
 }
 
 
-const eliminarServicio = async(uidServicio) => {
+const eliminarServicio = async (uidServicio) => {
     try {
         await Servicio.findByIdAndDelete(uidServicio);
         return true;
@@ -126,7 +130,7 @@ const darUidConductor = async(uidServicio) =>{
     }
 }
 
-module.exports  = {
+module.exports = {
     crearServicio,
     traerTodosServicios,
     cambiarEstadoServicio,

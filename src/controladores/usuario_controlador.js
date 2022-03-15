@@ -17,10 +17,10 @@ const { Estado } = require('../utils/enums/estado_enum');
 const log = require('../utils/logger/logger');
 const VehiculosControlador = require('./vehiculo_controlador');
 const { EstadoViaje } = require('../utils/enums/estadoViaje_enum');
+const { compararCifrado } = require("../ayudas/cifrado")
 
 
-
-const crearUsuario = async(req, res = response) => {
+const crearUsuario = async (req, res = response) => {
 
     try {
 
@@ -56,7 +56,7 @@ const crearUsuario = async(req, res = response) => {
     }
 }
 
-const buscarUsuario = async(req, res = response) => {
+const buscarUsuario = async (req, res = response) => {
 
     try {
         const { uid } = req.params;
@@ -83,11 +83,11 @@ const buscarUsuario = async(req, res = response) => {
     }
 }
 
-const buscarUsuarioCedula = async(req, res = response) => {
+const buscarUsuarioCedula = async (req, res = response) => {
 
     try {
         const { cedula } = req.params;
-        const usuario = await Usuario.find({cedula: cedula});
+        const usuario = await Usuario.find({ cedula: cedula });
 
         if (!usuario) {
             return res.status(400).json({
@@ -110,7 +110,7 @@ const buscarUsuarioCedula = async(req, res = response) => {
     }
 }
 
-const traerTodosUsuarios = async(req, res = response) => {
+const traerTodosUsuarios = async (req, res = response) => {
 
     try {
         const listaUsuario = await Usuario.find();
@@ -128,7 +128,7 @@ const traerTodosUsuarios = async(req, res = response) => {
     }
 }
 
-const actualizarUsuario = async(req, res = response) => {
+const actualizarUsuario = async (req, res = response) => {
 
     try {
         const {
@@ -160,7 +160,7 @@ const actualizarUsuario = async(req, res = response) => {
     }
 }
 
-const cambiarEstadoUsuario = async(req, res = response) => {
+const cambiarEstadoUsuario = async (req, res = response) => {
 
     try {
         const { uid } = req.body;
@@ -197,7 +197,7 @@ const cambiarEstadoUsuario = async(req, res = response) => {
  * @param {*} req Request con uid del partner
  * @param {*} res Respons del partner y el nuevo token
  */
-const renovarToken = async(req, res = response) => {
+const renovarToken = async (req, res = response) => {
 
     const uid = req.uid;
 
@@ -214,7 +214,7 @@ const renovarToken = async(req, res = response) => {
 }
 
 
-const cambiarContrasenia = async(req, res = response) => {
+const cambiarContrasenia = async (req, res = response) => {
     try {
         const uid = req.uid;
         const { contrasenia } = req.body;
@@ -242,8 +242,9 @@ const cambiarContrasenia = async(req, res = response) => {
     }
 }
 
-const cambiarContraseniaAdmin = async(req, res = response) => {
+const cambiarContraseniaAdmin = async (req, res = response) => {
     try {
+        console.log(req.body);
         const uid = req.body.uid;
         const { contrasenia } = req.body;
         const usuario = await Usuario.findById(uid);
@@ -253,12 +254,33 @@ const cambiarContraseniaAdmin = async(req, res = response) => {
                 msg: 'No existe el usuario'
             });
         }
-        usuario.contrasenia = cifrarTexto(contrasenia);
-        usuario.cambio_contrasenia = 0;
-        usuario.save();
-        res.json({
-            ok: true
-        });
+        console.log(req.body.contraseniaActual);
+        if (req.body.contraseniaActual != undefined) {
+
+            const comparar = compararCifrado(req.body.contraseniaActual, usuario.contrasenia);
+
+            if (comparar) {
+                usuario.contrasenia = cifrarTexto(contrasenia);
+                usuario.cambio_contrasenia = 0;
+                usuario.save();
+                res.json({
+                    ok: true
+                });
+            } else {
+
+                res.status(500).json({
+                    ok: false,
+                    msg: 'Las contrasenias no coinciden.'
+                })
+            }
+        } else {
+            usuario.contrasenia = cifrarTexto(contrasenia);
+            usuario.cambio_contrasenia = 0;
+            usuario.save();
+            res.json({
+                ok: true
+            });
+        }
 
     } catch (error) {
         console.error(error);
@@ -269,13 +291,13 @@ const cambiarContraseniaAdmin = async(req, res = response) => {
     }
 }
 
-const agregarVehiculo = async(req, res = response) => {
+const agregarVehiculo = async (req, res = response) => {
 
     try {
 
         const { placa } = req.body;
         const usuario = await Usuario.findById(req.uid);
-        const vehiculoExistente = await Vehiculo.findOne({ placa: placa});
+        const vehiculoExistente = await Vehiculo.findOne({ placa: placa });
 
         if (vehiculoExistente) {
             return res.status(400).json({
@@ -301,17 +323,17 @@ const agregarVehiculo = async(req, res = response) => {
     }
 }
 
-const listarVehiculosPorUid = async(req, res = response) => {
-    
+const listarVehiculosPorUid = async (req, res = response) => {
+
     try {
-        const uid  = req.uid;
-        const vehiculosBD = await Usuario.findById(uid,'vehiculos').populate('vehiculos', null, { estado : Estado.Activo });
-        
+        const uid = req.uid;
+        const vehiculosBD = await Usuario.findById(uid, 'vehiculos').populate('vehiculos', null, { estado: Estado.Activo });
+
         res.json({
             ok: true,
-            vehiculos:vehiculosBD.vehiculos
+            vehiculos: vehiculosBD.vehiculos
         });
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -319,15 +341,15 @@ const listarVehiculosPorUid = async(req, res = response) => {
             msg: 'Hable con el admin'
         })
     }
-    
+
 }
 
-const agregarServicio = async(req, res = response) => {
+const agregarServicio = async (req, res = response) => {
     try {
         const creacionServicio = await ServicioControlador.crearServicio(req.body);
-        if(creacionServicio.rs){
+        if (creacionServicio.rs) {
             let user = await Usuario.findById(req.uid);
-            user.servicios.push( creacionServicio.msg);
+            user.servicios.push(creacionServicio.msg);
             user.historialDestino = req.body.historialDestino;
             user.historialOrigen = req.body.historialOrigen;
             log.info(JSON.stringify(req.historialOrigen));
@@ -338,7 +360,7 @@ const agregarServicio = async(req, res = response) => {
                 ok: true,
                 msg: "Su servicio fue creado exitosamente."
             });
-        }else{
+        } else {
             log.error(req.uid, req.body, req.params, req.query, creacionServicio.msg);
             res.json({
                 ok: false,
@@ -352,20 +374,20 @@ const agregarServicio = async(req, res = response) => {
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 }
 
-const separaCupo = async(req, res = response) => {
+const separaCupo = async (req, res = response) => {
 
     try {
         let separacion = await ServicioControlador.agregarCupo(req.uid, req.body.idServicio);
 
-        if(separacion == true){
+        if (separacion == true) {
             res.json({
                 ok: true,
                 msg: "Su cupo fue apartado exitosamente."
             });
-        }else {
+        } else {
             log.error(req.uid, req.body, req.params, req.query, separacion);
             res.json({
                 ok: true,
@@ -380,11 +402,11 @@ const separaCupo = async(req, res = response) => {
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 
 }
 
-const darServiciosCreados = async(req, res = response) => {
+const darServiciosCreados = async (req, res = response) => {
 
     try {
         const uid = req.uid;
@@ -406,21 +428,22 @@ const darServiciosCreados = async(req, res = response) => {
             ok: true,
             servicios: servicios.servicios
         });
-        
+
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 
 }
 
-const darServiciosPostulados = async(req, res = response) => {
+const darServiciosPostulados = async (req, res = response) => {
 
     try {
         const uid = req.uid;
+<<<<<<< HEAD
         const serviciosAux = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}})
         .populate('pasajeros.pasajero', 'nombre');
         var servicios = [];
@@ -448,6 +471,11 @@ const darServiciosPostulados = async(req, res = response) => {
         }
 
       res.json({
+=======
+        const servicios = await Servicio.find({ 'pasajeros.pasajero': uid, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
+            .populate('pasajeros.pasajero', 'nombre');
+        res.json({
+>>>>>>> 73643a184b6fdc2ddea75bff74db40d2dc1bd05a
             ok: true,
             servicios: servicios
         });
@@ -458,16 +486,16 @@ const darServiciosPostulados = async(req, res = response) => {
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 
 }
 
-const darServiciosDisponibles = async(req, res = response) => {
+const darServiciosDisponibles = async (req, res = response) => {
 
     try {
         const uid = req.uid;
-        const serviciosPostulados = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, 'uid', {sort: {fechayhora: 1}});
-        const serviciosPropios = await Usuario.findById(uid, 'servicios').populate('servicios', uid, {$or : [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]},{ sort: { fechayhora: 1}});
+        const serviciosPostulados = await Servicio.find({ 'pasajeros.pasajero': uid, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, 'uid', { sort: { fechayhora: 1 } });
+        const serviciosPropios = await Usuario.findById(uid, 'servicios').populate('servicios', uid, { $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, { sort: { fechayhora: 1 } });
         const serviciosExcluidos = [];
         serviciosPostulados.forEach(element => {
             serviciosExcluidos.push(element);
@@ -475,11 +503,11 @@ const darServiciosDisponibles = async(req, res = response) => {
         serviciosPropios.servicios.forEach(element => {
             serviciosExcluidos.push(element);
         });
-        let serviciosDisponibles =[];
-        if(serviciosExcluidos.length == 0){
-            serviciosDisponibles = await Servicio.find({$or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
-        }else{
-            serviciosDisponibles = await Servicio.find({$nor: serviciosExcluidos , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null , {sort: {fechayhora: 1}})
+        let serviciosDisponibles = [];
+        if (serviciosExcluidos.length == 0) {
+            serviciosDisponibles = await Servicio.find({ $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
+        } else {
+            serviciosDisponibles = await Servicio.find({ $nor: serviciosExcluidos, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
         }
         res.json({
             ok: true,
@@ -491,21 +519,21 @@ const darServiciosDisponibles = async(req, res = response) => {
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 
 }
 
-const darHistorial = async(req, res = response) => {
+const darHistorial = async (req, res = response) => {
 
     try {
         const uid = req.uid;
-        const serviciosComoConductor = await Usuario.findById(uid, 'servicios').populate('servicios', null, {estado: EstadoViaje.Finalizado},{ sort: { fechayhora: -1}});
-        const serviciosComoUsuario = await Servicio.find({'pasajeros.pasajero': uid , estado: EstadoViaje.Finalizado}, null, {sort: {fechayhora: -1}});
+        const serviciosComoConductor = await Usuario.findById(uid, 'servicios').populate('servicios', null, { estado: EstadoViaje.Finalizado }, { sort: { fechayhora: -1 } });
+        const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid, estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } });
         console.log(serviciosComoUsuario.servicios);
         res.json({
             ok: true,
-            serviciosComoConductor: (serviciosComoConductor.servicios == undefined) ?  [] : serviciosComoConductor.servicios,
-            serviciosComoUsuario : (serviciosComoUsuario.servicios == undefined) ?  [] : serviciosComoUsuario.servicios
+            serviciosComoConductor: (serviciosComoConductor.servicios == undefined) ? [] : serviciosComoConductor.servicios,
+            serviciosComoUsuario: (serviciosComoUsuario.servicios == undefined) ? [] : serviciosComoUsuario.servicios
         });
 
     } catch (error) {
@@ -514,18 +542,18 @@ const darHistorial = async(req, res = response) => {
             ok: false,
             msg: 'Hable con el admin'
         });
-    } 
+    }
 
 }
 
-const eliminarServicio = async(req, res = response) => {
+const eliminarServicio = async (req, res = response) => {
     try {
 
         const uid = req.uid;
         const { uidServicio } = req.params;
         let eliminarEnServicio = ServicioControlador.eliminarServicio(uidServicio);
         const usuario = await Usuario.findById(uid);
-        usuario.servicios = usuario.servicios.filter( (item) => item != uidServicio);
+        usuario.servicios = usuario.servicios.filter((item) => item != uidServicio);
         usuario.save();
         res.json({
             ok: true,
@@ -542,17 +570,17 @@ const eliminarServicio = async(req, res = response) => {
 
 }
 
-const editarServicio = async(req, res = response) => {
+const editarServicio = async (req, res = response) => {
     try {
         const uid = req.uid;
         const { uidServicio } = req.params;
         let editar = ServicioControlador.editarServicio(uidServicio, req.body);
-        if( editar =! true){
+        if (editar = ! true) {
             log.error(req.uid, req.body, req.params, req.query, quitarCupo);
             res.json({
                 ok: false,
                 msg: 'Intente mas tarde'
-            });   
+            });
         }
         res.json({
             ok: true,
@@ -568,20 +596,20 @@ const editarServicio = async(req, res = response) => {
     }
 }
 
-const desPostularse = async(req, res = response) => {
+const desPostularse = async (req, res = response) => {
 
     try {
         const uid = req.uid;
         const { uidServicio } = req.body;
         let quitarCupo = ServicioControlador.quitarCupo(uid, uidServicio);
-        if( quitarCupo =! true){
+        if (quitarCupo = ! true) {
             log.error(req.uid, req.body, req.params, req.query, quitarCupo);
             res.json({
                 ok: false,
                 msg: 'Intente mas tarde'
-            });        
+            });
         }
-    
+
         res.json({
             ok: true,
             msg: 'Tu cupo se ha liberado correctamente'
@@ -597,14 +625,14 @@ const desPostularse = async(req, res = response) => {
 
 }
 
-const calificarPasajero = async(req, res = response) =>{
+const calificarPasajero = async (req, res = response) => {
     try {
         const { uidServicio, uidPasajero, calificacion } = req.body;
 
         const servicio = await Servicio.findById(uidServicio);
 
         servicio.pasajeros.forEach(element => {
-            if(element.pasajero == uidPasajero){
+            if (element.pasajero == uidPasajero) {
                 element.puntuacionPasajero = calificacion;
             }
         });
@@ -618,7 +646,7 @@ const calificarPasajero = async(req, res = response) =>{
         res.json({
             ok: true,
             msg: 'Gracias por tu calificacion'
-        });  
+        });
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
         res.status(500).json({
@@ -627,12 +655,12 @@ const calificarPasajero = async(req, res = response) =>{
         });
     }
 }
-const calificarConductor = async(req, res = response) =>{
+const calificarConductor = async (req, res = response) => {
     try {
         const uid = req.uid;
         const { uidServicio, calificacion } = req.body;
-        const usuarios = await Usuario.find({ servicios : uidServicio});
-        let uidUsuario = usuarios[0]._id; 
+        const usuarios = await Usuario.find({ servicios: uidServicio });
+        let uidUsuario = usuarios[0]._id;
         const usuario = await Usuario.findById(uidUsuario);
         usuario.sumatoriaCalificacionConductor = usuario.sumatoriaCalificacionConductor + calificacion;
         usuario.calificacionConductor = usuario.sumatoriaCalificacionConductor / usuario.numServiciosHechos;
@@ -640,17 +668,17 @@ const calificarConductor = async(req, res = response) =>{
 
         const servicio = await Servicio.findById(uidServicio);
         servicio.pasajeros.forEach(element => {
-            if(element.pasajero == uid){
+            if (element.pasajero == uid) {
                 element.puntuacionConductor = calificacion;
             }
         });
         await servicio.save();
-        await Usuario.findByIdAndUpdate(uid, {ultimoServicioSinCalificar: null});
+        await Usuario.findByIdAndUpdate(uid, { ultimoServicioSinCalificar: null });
 
         res.json({
             ok: true,
             msg: 'Gracias por tu calificacion'
-        });  
+        });
 
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);
@@ -660,7 +688,7 @@ const calificarConductor = async(req, res = response) =>{
         });
     }
 }
-const finalizarServicio = async(req, res = response) =>{
+const finalizarServicio = async (req, res = response) => {
     try {
 
         const uid = req.uid;
@@ -670,7 +698,7 @@ const finalizarServicio = async(req, res = response) =>{
         servicio.pasajeros.forEach(async element => {
             const usuario = await Usuario.findById(element.pasajero);
             usuario.ultimoServicioSinCalificar = uidServicio;
-            usuario.numServiciosAdquiridos = usuario.numServiciosAdquiridos + 1; 
+            usuario.numServiciosAdquiridos = usuario.numServiciosAdquiridos + 1;
             usuario.save();
         });
 
@@ -678,7 +706,7 @@ const finalizarServicio = async(req, res = response) =>{
         servicio.save();
         const usuario = await Usuario.findById(uid);
         usuario.numServiciosHechos = usuario.numServiciosHechos + 1;
-        usuario.save(); 
+        usuario.save();
 
         res.json({
             ok: true,
@@ -694,10 +722,10 @@ const finalizarServicio = async(req, res = response) =>{
     }
 }
 
-const iniciarServicio = async(req, res = response) =>{
+const iniciarServicio = async (req, res = response) => {
     try {
-        const {uidServicio} = req.body;
-        const servicio = await Servicio.findByIdAndUpdate(uidServicio, {estado: EstadoViaje.Camino});
+        const { uidServicio } = req.body;
+        const servicio = await Servicio.findByIdAndUpdate(uidServicio, { estado: EstadoViaje.Camino });
         //TODO: Toca enviar la notificacion push
         res.json({
             ok: true,

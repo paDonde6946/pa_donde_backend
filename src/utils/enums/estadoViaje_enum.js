@@ -1,7 +1,8 @@
 const EstadoViaje = {
     Esperando : 1,
     Camino : 2,
-    Finalizado : 3
+    Finalizado : 3,
+    Inactivo: 4
 } 
 
 /**
