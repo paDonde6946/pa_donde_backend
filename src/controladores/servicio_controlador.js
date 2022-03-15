@@ -120,7 +120,6 @@ const eliminarServicio = async (uidServicio) => {
     }
 }
 
-<<<<<<< Updated upstream
 const darUidConductor = async(uidServicio) =>{
     try {
         const conductor = await Usuario.find({servicios: uidServicio});
@@ -131,10 +130,7 @@ const darUidConductor = async(uidServicio) =>{
     }
 }
 
-module.exports  = {
-=======
 module.exports = {
->>>>>>> Stashed changes
     crearServicio,
     traerTodosServicios,
     cambiarEstadoServicio,

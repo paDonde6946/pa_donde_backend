@@ -411,7 +411,6 @@ const darServiciosCreados = async (req, res = response) => {
     try {
         const uid = req.uid;
         const servicios = await Usuario.findById(uid, 'servicios').
-<<<<<<< Updated upstream
         populate(
             {
                 path: 'servicios',
@@ -421,16 +420,6 @@ const darServiciosCreados = async (req, res = response) => {
                 }, 
                 match: { $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}
             }).sort({'servicios.fechayhora': 1});
-=======
-            populate(
-                {
-                    path: 'servicios',
-                    populate: {
-                        path: 'pasajeros.pasajero',
-                        select: 'nombre'
-                    }
-                }).sort({ 'servicios.fechayhora': 1 });
->>>>>>> Stashed changes
 
         let pasajeros = [];
 
