@@ -2,6 +2,7 @@ const { response } = require('express');
 const { body } = require('express-validator');
 
 const Servicio = require('../modelo/Servicio_modelo');
+const Usuario = require('../modelo/Usuario_modelo');
 
 
 const crearServicio = async(data) => {
@@ -115,6 +116,16 @@ const eliminarServicio = async(uidServicio) => {
     }
 }
 
+const darUidConductor = async(uidServicio) =>{
+    try {
+        const conductor = await Usuario.find({servicios: uidServicio});
+        return conductor[0]._id;
+        
+    } catch (error) {
+        
+    }
+}
+
 module.exports  = {
     crearServicio,
     traerTodosServicios,
@@ -122,5 +133,6 @@ module.exports  = {
     agregarCupo,
     quitarCupo,
     editarServicio,
-    eliminarServicio
+    eliminarServicio,
+    darUidConductor
 }

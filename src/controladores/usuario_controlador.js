@@ -368,18 +368,12 @@ const darServiciosCreados = async(req, res = response) => {
                 populate: {
                   path: 'pasajeros.pasajero',
                   select: 'nombre' 
-                }
+                }, 
+                match: { $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}
             }).sort({'servicios.fechayhora': 1});
 
         let pasajeros = [];
 
-        // servicios.pasajeros.forEach(element => {
-        //     pasajeros.push({
-        //         pasajero: element.pasajero._id,
-        //         nombre:element.pasajero.nombre
-        //     })
-        // });
-        // servicios.pasajeros = pasajeros;
 
         res.json({
             ok: true,
