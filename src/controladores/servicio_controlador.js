@@ -50,7 +50,7 @@ const cambiarEstadoServicio = async(req, res = response) => {
         }
 
         if (servicio.estado == 1) {
-            servicio.estado = 0;
+            servicio.estado = 2;
         } else {
             servicio.estado = 1;
         }
