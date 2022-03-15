@@ -521,8 +521,24 @@ const darHistorial = async (req, res = response) => {
 
     try {
         const uid = req.uid;
-        const serviciosComoConductor = await Usuario.findById(uid, 'servicios').populate('servicios', null, { estado: EstadoViaje.Finalizado }, { sort: { fechayhora: -1 } });
-        const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid, estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } });
+        const serviciosComoConductor = 
+        await Usuario.findById(uid, 'servicios').
+        populate(
+            {
+                path: 'servicios',
+                populate: {
+                  path: 'pasajeros.pasajero',
+                  select: 'nombre' 
+                }, 
+                match: { estado: EstadoViaje.Finalizado }
+            }
+        ).sort({ 'servicios.fechayhora': -1 });
+        
+        const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid, estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } })
+        .populate({
+            path: 'pasajeros.pasajero',
+            select: 'nombre' 
+          });
         console.log(serviciosComoUsuario.servicios);
         res.json({
             ok: true,
