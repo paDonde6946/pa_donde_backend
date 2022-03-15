@@ -36,7 +36,7 @@ io.on('connection', client => {
         await agregarMensaje(payload);
         const conversacion = await traerConversacion(payload);
         client.emit('darConversacion', conversacion);
-        // io.to(payload.para).emit('recibirMensaje', payload);
+        io.to(payload.para).emit('recibirMensaje', payload);
     });
 
     client.on('traerConversacion', async(payload) => {

@@ -421,9 +421,33 @@ const darServiciosPostulados = async(req, res = response) => {
 
     try {
         const uid = req.uid;
-        const servicios = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}})
+        const serviciosAux = await Servicio.find({'pasajeros.pasajero': uid , $or :[{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }]}, null, {sort: {fechayhora: 1}})
         .populate('pasajeros.pasajero', 'nombre');
-        res.json({
+        var servicios = [];
+
+
+        for (let index = 0; index < serviciosAux.length; index++) {
+            const servicio = serviciosAux[index];
+            const conductor = await Usuario.find({servicios: servicio._id});
+            servicios.push({ 
+                uid: servicio._id,
+                nombreOrigen: servicio.nombreOrigen,
+                nombreDestino: servicio.nombreDestino,
+                polylineRuta: servicio.polylineRuta,
+                fechayhora: servicio.fechayhora,
+                idVehiculo: servicio.idVehiculo,
+                cantidadCupos: servicio.cantidadCupos,
+                distancia: servicio.distancia,
+                duracion: servicio.duracion,
+                idAuxilioEconomico: servicio.idAuxilioEconomico,
+                estado: servicio.estado,
+                pasajeros: servicio.pasajeros,
+                nombreConductor: conductor[0].nombre
+            });
+            
+        }
+
+      res.json({
             ok: true,
             servicios: servicios
         });
