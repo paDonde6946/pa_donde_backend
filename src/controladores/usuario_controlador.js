@@ -306,7 +306,7 @@ const agregarVehiculo = async (req, res = response) => {
             });
         }
         const vehiculo = await Vehiculo.create(req.body);
-        usuario.vehiculos.push({ vehiculoId: vehiculo._id });
+        usuario.vehiculos.push(vehiculo._id );
         await usuario.save();
 
         res.json({
