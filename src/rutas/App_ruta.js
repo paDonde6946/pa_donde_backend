@@ -149,6 +149,7 @@ router.post('/grabarMensaje', [
 router.post('/cargarLicenciaConduccion', [
     check('tipoDocumento', 'El tipoDocumento es obligatorio').notEmpty(),
     validarCampos,
+    validarJWT
 ], cargarArchivo);
 
 // /app/desPostularse
