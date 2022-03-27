@@ -13,7 +13,7 @@ const { crearUsuario, renovarToken, cambiarContraseniaAdmin } = require('../cont
 const router = Router();
 
 
-router.get('/usuario/:correo/:contrasenia', [
+router.get('/usuario/:correo/:contrasenia/:tokenMensaje', [
     check('correo', 'El correo es obligatorio o no es permitido').isEmail().matches(/[a-z]*@unbosque.edu.co/),
     check('contrasenia', 'La clave es obligatoria').not().isEmpty(),
     // validarCorreo,

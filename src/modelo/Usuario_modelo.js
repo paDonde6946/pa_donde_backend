@@ -85,6 +85,12 @@ const Usuario = Schema({
     sumatoriaCalificacionPasajero: {
         type: Number,
         default: 0
+    },
+    tokenMensaje: {
+        type: String
+    },
+    fotoLicencia:{
+        type: String
     }
 }, {
     timestamps: true

@@ -18,7 +18,8 @@ const log = require('../utils/logger/logger');
 const VehiculosControlador = require('./vehiculo_controlador');
 const { EstadoViaje } = require('../utils/enums/estadoViaje_enum');
 const { compararCifrado } = require("../ayudas/cifrado")
-
+const { envioNotificacion } = require("./notificaciones_push_controlador");
+const { AccionesNotificaciones } = require('../utils/enums/acciones_notificaciones_enum');
 
 const crearUsuario = async (req, res = response) => {
 
@@ -302,7 +303,7 @@ const agregarVehiculo = async (req, res = response) => {
         if (vehiculoExistente) {
             return res.status(400).json({
                 ok: false,
-                msg: ' Ya existe el vehiculos'
+                msg: ' Ya existe el vehículo'
             });
         }
         const vehiculo = await Vehiculo.create(req.body);
@@ -311,7 +312,7 @@ const agregarVehiculo = async (req, res = response) => {
 
         res.json({
             ok: true,
-            msg: "Felicitaciones su vehiculo se agrego correctamente."
+            msg: "Felicitaciones su vehículo se agrego correctamente."
         });
 
     } catch (error) {
@@ -380,9 +381,15 @@ const agregarServicio = async (req, res = response) => {
 const separaCupo = async (req, res = response) => {
 
     try {
-        let separacion = await ServicioControlador.agregarCupo(req.uid, req.body.idServicio);
+        const {idServicio} = req.body;
+        let separacion = await ServicioControlador.agregarCupo(req.uid, idServicio);
 
         if (separacion == true) {
+            const usuarioConductor = await Usuario.find({servicios: idServicio});
+            envioNotificacion({
+                accion: AccionesNotificaciones.PostuladosServicio,
+                servicio: idServicio
+            }, "Felicitaciones, ya tienes un nuevo postulado entra y chatea con el.", "Tienes un nuevo postulado!!", usuarioConductor[0].tokenMensaje)
             res.json({
                 ok: true,
                 msg: "Su cupo fue apartado exitosamente."
@@ -611,7 +618,7 @@ const desPostularse = async (req, res = response) => {
     try {
         const uid = req.uid;
         const { uidServicio } = req.body;
-        let quitarCupo = ServicioControlador.quitarCupo(uid, uidServicio);
+        let quitarCupo = await ServicioControlador.quitarCupo(uid, uidServicio);
         if (quitarCupo = ! true) {
             log.error(req.uid, req.body, req.params, req.query, quitarCupo);
             res.json({
@@ -620,6 +627,12 @@ const desPostularse = async (req, res = response) => {
             });
         }
 
+        const usuarioConductor = await Usuario.find({servicios: uidServicio});
+            envioNotificacion({
+                accion: AccionesNotificaciones.PostuladosServicio,
+                servicio: uidServicio
+        }, "Un usuario a cancelado su cupo, ingresa y mira quien fue.", ":( Se ha liberado un cupo", usuarioConductor[0].tokenMensaje)
+            
         res.json({
             ok: true,
             msg: 'Tu cupo se ha liberado correctamente'
@@ -703,7 +716,7 @@ const finalizarServicio = async (req, res = response) => {
 
         const uid = req.uid;
         const { uidServicio } = req.body;
-        const servicio = await Servicio.findById(uidServicio);
+        const servicio = await Servicio.findById(uidServicio).populate("pasajeros.pasajero", 'tokenMensaje');
 
         servicio.pasajeros.forEach(async element => {
             const usuario = await Usuario.findById(element.pasajero);
@@ -717,6 +730,12 @@ const finalizarServicio = async (req, res = response) => {
         const usuario = await Usuario.findById(uid);
         usuario.numServiciosHechos = usuario.numServiciosHechos + 1;
         usuario.save();
+        servicio.pasajeros.forEach(pasajero => {
+            envioNotificacion({
+                accion: AccionesNotificaciones.FinalizarServicio,
+                servicio: uidServicio
+            }, "Tu servicio ha finalizado, porfavor califica al conductor.", "Ha finalizado el servicio!!", pasajero.pasajero.tokenMensaje)    
+        });
 
         res.json({
             ok: true,
@@ -735,8 +754,18 @@ const finalizarServicio = async (req, res = response) => {
 const iniciarServicio = async (req, res = response) => {
     try {
         const { uidServicio } = req.body;
-        const servicio = await Servicio.findByIdAndUpdate(uidServicio, { estado: EstadoViaje.Camino });
-        //TODO: Toca enviar la notificacion push
+        const servicio = await Servicio.findById(uidServicio).populate('pasajeros.pasajero');
+        servicio.estado = EstadoViaje.Camino;
+        await servicio.save();
+
+        servicio.pasajeros.forEach(pasajero => {
+            envioNotificacion({
+                accion: AccionesNotificaciones.IniciarServicio,
+                servicio: uidServicio
+            }, "Tu servicio con destino a "+ servicio.nombreDestino+" ha iniciado.", "Ha iniciado el servicio!!", pasajero.pasajero.tokenMensaje)
+            
+        });
+        
         res.json({
             ok: true,
             msg: 'Su servicio a iniciado correctamente'

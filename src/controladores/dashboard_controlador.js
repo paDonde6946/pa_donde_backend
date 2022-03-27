@@ -36,7 +36,7 @@ const cantidadVehiculos  = async(req, res = response) => {
         return res.json({
             ok: true,
             value: cantidadDeVehiculos,
-            msg: 'El numero de vehiculos es: '
+            msg: 'El numero de vehículo es: '
         });
     } catch (error) {
         log.error(req.uid, req.body, req.params, req.query, error);

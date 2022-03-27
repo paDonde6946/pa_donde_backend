@@ -22,7 +22,7 @@ const buscarVehciulo = async(req, res = response) => {
         if (!vehiculo) {
             return res.status(400).json({
                 ok: false,
-                msg: 'No existe el vehiculo'
+                msg: 'No existe el vehículo'
             });
         }
         res.json({
@@ -48,7 +48,7 @@ const buscarVehiculoPorPlaca = async(req, res = response) => {
         if (!vehiculo) {
             return res.status(400).json({
                 ok: false,
-                msg: 'No existe el vehiculo'
+                msg: 'No existe el vehículo'
             });
         }
         res.json({
@@ -94,7 +94,7 @@ const actualizarVehciulo = async(req, res = response) => {
 
         res.json({
             ok: true,
-            msg: "Su vehiculo se actualizo correctamente."
+            msg: "Su vehículo se actualizo correctamente."
         });
 
     } catch (error) {
@@ -115,10 +115,10 @@ const cambiarEstadoVehciulo = async(req, res = response) => {
         const vehiculo = await Vehiculo.findById(uid);
 
         if (!vehiculo) {
-            log.error(req.uid, req.body, req.params, req.query, 'No existe el vehiculo');
+            log.error(req.uid, req.body, req.params, req.query, 'No existe el vehículo');
             return res.status(400).json({
                 ok: false,
-                msg: 'No existe el vehiculo'
+                msg: 'No existe el vehículo'
             });
         }
 
@@ -154,7 +154,7 @@ const cambiarEstado = async (uid, cambioEstado) => {
         let vehiculo = await Vehiculo.findByIdAndUpdate(uid, { estado : cambioEstado});
         return { ok: true };
     } catch (error) {
-        return { ok: false, msg: "No existe el vehiculo de uid "+uid  };
+        return { ok: false, msg: "No existe el vehículo de uid "+uid  };
     }
 
 }
