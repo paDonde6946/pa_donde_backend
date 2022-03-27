@@ -1,12 +1,13 @@
 const { response } = require('express');
 const fileUpload = require('express-fileupload');
 var fs = require('fs');
+const Usuario_modelo = require('../modelo/Usuario_modelo');
 const { TipoDocumento } = require('../utils/enums/tipo_documento_enum')
 
 
-const cargarArchivo = (req, res = response) => {
+const cargarArchivo = async (req, res = response) =>  {
 
-    const uid = "6154ad4c46197bee55be9bd3"; 
+    const uid = req.uid; 
     const { tipoDocumento } = req.body;
 
     var ruta = process.env.RUTA_IMAGENES;
@@ -22,6 +23,11 @@ const cargarArchivo = (req, res = response) => {
     }
 
     let EDFile = req.files.file;
+
+    const usuario = await Usuario_modelo.findById(uid);
+    usuario.fotoLicencia = ruta;
+    await usuario.save();
+
     EDFile.mv(ruta, err => {
         if (err) return res.status(500).send({ message: err });
         return res.status(200).send({ ok:true,ruta: ruta });
