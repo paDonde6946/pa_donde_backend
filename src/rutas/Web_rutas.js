@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula } = require('../controladores/usuario_controlador');
+const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula, agregarVehiculoAdmin } = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
 const { traerTodosServicios, cambiarEstadoServicio } = require('../controladores/servicio_controlador');
 const { cantidadUsuarios, cantidadVehiculos, cantidadConductores } = require('../controladores/dashboard_controlador');
@@ -61,10 +61,10 @@ router.post('/vehiculos/agregarVehiculo', [
     check('marca', 'El marca es obligatorio').notEmpty().isString(),
     check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
     check('modelo', 'El modelo es obligatorio').notEmpty().isString(),
-    // check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
+    check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
     validarCampos,
     validarJWT
-], agregarVehiculo);
+], agregarVehiculoAdmin);
 
 //  Ruta completa : /web/vehiculos/listarVehiculos
 router.get('/vehiculos/listarVehiculos', [
