@@ -12,6 +12,8 @@ sendEmail = function(opcionesCorreo) {
 
     transporter.sendMail(opcionesCorreo, function(error, info) {
         if (error) {
+            console.log(error);
+
             return false;
             log.error(req.uid, req.body, req.params, req.query, error);
         } else {
@@ -101,7 +103,7 @@ const activacionCuenta = (link) => {
         '            <h4 style="border-color: white;' +
         '            border-style: solid;' +
         '            box-shadow: 0px 0px 4px black;' +
-        '            width: 12%;">' +
+        '            width: 80%;">' +
         link +
         '            </h4>' +
         '        </div>' +

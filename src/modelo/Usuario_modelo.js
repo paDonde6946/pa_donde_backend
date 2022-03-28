@@ -45,16 +45,18 @@ const Usuario = Schema({
         default: 0
     },
     calificacionConductor: {
-        type: Number
+        type: Number,
+        default: 0
     },
     calificacionUsuario: {
-        type: Number
+        type: Number,
+        default: 0
     },
-    historialOrigen:{
+    historialOrigen: {
         type: Object,
         default: {}
     },
-    historialDestino:{
+    historialDestino: {
         type: Object,
         default: {}
     },
@@ -63,20 +65,20 @@ const Usuario = Schema({
         ref: "Vehiculo"
     }],
     servicios: [{
-            type: Schema.Types.ObjectId,
-            ref: "Servicio"
+        type: Schema.Types.ObjectId,
+        ref: "Servicio"
     }],
-    ultimoServicioSinCalificar:{
+    ultimoServicioSinCalificar: {
         type: Schema.Types.ObjectId,
         ref: "Servicio"
     },
-    numServiciosAdquiridos:{
+    numServiciosAdquiridos: {
         type: Number,
         default: 0
     },
     numServiciosHechos: {
         type: Number,
-        default: 0    
+        default: 0
     },
     sumatoriaCalificacionConductor: {
         type: Number,
@@ -89,7 +91,7 @@ const Usuario = Schema({
     tokenMensaje: {
         type: String
     },
-    fotoLicencia:{
+    fotoLicencia: {
         type: String
     }
 }, {
