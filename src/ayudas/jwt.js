@@ -11,7 +11,7 @@ const generarJWT = (uid) => {
         const payload = { uid };
 
         jwt.sign(payload, process.env.JWT_KEY, {
-            expiresIn: '72h',
+            expiresIn: '120h',
         }, (err, token) => {
 
 

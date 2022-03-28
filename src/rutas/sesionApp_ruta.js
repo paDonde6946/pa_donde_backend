@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos, validarCorreo } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { loginUsuario, loginAdmin, olvidarContrasenia } = require('../controladores/ingreso_controlador');
+const { loginUsuario, loginAdmin, olvidarContrasenia, preRegistro, crearUsuarioPosRegistro } = require('../controladores/ingreso_controlador');
 const { crearUsuario, renovarToken, cambiarContraseniaAdmin } = require('../controladores/usuario_controlador');
 
 
@@ -34,7 +34,7 @@ router.put('/usuario/registrar', [
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
     check('cedula', 'El cedula es obligatorio').not().isEmpty().isNumeric(),
     validarCampos,
-], crearUsuario);
+], preRegistro);
 
 
 router.post('/admin/olvidarContrasenia', [
@@ -52,6 +52,11 @@ router.post('/cambiarContraseniaAdmin', [
     validarCampos,
     validarJWT
 ], cambiarContraseniaAdmin);
+
+router.get('/activacionCuenta/:token',[
+    check('token', 'El token es obligatorio').not().isEmpty(),
+    validarCampos,
+], crearUsuarioPosRegistro);
 
 router.get('/renovarToken', validarJWT, renovarToken);
 

@@ -8,8 +8,9 @@ const { generarJWT, comprobarJWT } = require('../ayudas/jwt');
 // Importacion de generador de contrasenia
 const generator = require('generate-password');
 const { cifrarTexto, compararCifrado } = require('../ayudas/cifrado');
-const { enviarOlvidoContrasenia } = require('../correos/correos');
+const { enviarOlvidoContrasenia, enviarActivacionCuenta } = require('../correos/correos');
 const log = require('../utils/logger/logger');
+const jwt = require('jsonwebtoken');
 
 
 // Tipos de Usuario 
@@ -143,8 +144,85 @@ const olvidarContrasenia = async(req, res = response) => {
     }
 }
 
+const preRegistro = async(req, res = response) => {
+
+    try {
+        const {nombre, apellido, celular, correo, contrasenia, cedula} = req.body;
+        
+        const existeCorreo = await Usuario.findOne({ correo });
+        if (existeCorreo) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El correo ya esta registrado'
+            });
+        }
+        
+        const payload = { 
+            nombre,
+            apellido,
+            celular,
+            correo,
+            contrasenia,
+            cedula
+         };
+        let tokenRe = jwt.sign({
+            data: payload
+          }, process.env.JWT_KEY, { expiresIn: '5h' });
+
+        enviarActivacionCuenta( correo, process.env.DOMINIO+"/app/login"+"/activacionCuenta/"+tokenRe );
+        res.json({
+            ok: true,
+            msg : "Por favor revisa tu correo"
+        });
+    } catch (error) {
+        log.error(req.uid, req.body, req.params, req.query, error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+}
+
+const crearUsuarioPosRegistro = async(req, res = response) => {
+
+    const {token} = req.params;
+    let payload = '';
+    try {
+        const {data} = jwt.verify(token, process.env.JWT_KEY);
+        payload = data;
+    } catch (error) {
+        return res.sendFile(__dirname.split('src')[0]+'/public/TokenVencido.html');
+    }
+
+    try {
+        const { correo, contrasenia } = payload;
+        const existeCorreo = await Usuario.findOne({ correo });
+        
+        if (existeCorreo) {
+            return res.sendFile(__dirname.split('src')[0]+'/public/ActivacionErronea.html');
+        }
+
+        const usuario = new Usuario(payload);
+
+        usuario.contrasenia = cifrarTexto(contrasenia.toString());
+
+        await usuario.save();
+
+        return res.sendFile(__dirname.split('src')[0]+'/public/ActivacionExitosa.html');
+        
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el admin'
+        })
+    }
+
+}
 module.exports = {
     loginUsuario,
     loginAdmin,
-    olvidarContrasenia
+    olvidarContrasenia,
+    preRegistro,
+    crearUsuarioPosRegistro
 };
