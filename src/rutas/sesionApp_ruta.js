@@ -37,6 +37,16 @@ router.put('/usuario/registrar', [
 ], preRegistro);
 
 
+router.put('/usuario/registrar', [
+    check('nombre', 'El nombre es obligatorio y solo se acepta texo').isString().not().isEmpty(),
+    check('apellido', 'El apellido es obligatorio y solo se acepta texo').isString().not().isEmpty(),
+    check('celular', 'El celular es obligatorio').isNumeric().not().isEmpty(),
+    check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
+    check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
+    check('cedula', 'El cedula es obligatorio').not().isEmpty().isNumeric(),
+    validarCampos,
+], crearUsuario);
+
 router.post('/admin/olvidarContrasenia', [
     check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
     validarCampos,

@@ -23,10 +23,7 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Servidor de node
-const servidor = require('http').createServer((req,res) => {
-    res.statusCode = 200;
-    res.end("Hola mundo");
-});
+const servidor = require('http').createServer(app);
 
 // Servicio de socket
 module.exports.io = require('socket.io')(servidor);
