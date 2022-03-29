@@ -35,11 +35,11 @@ app.use(express.static(publicoPath));
 
 
 // Rutas Movil 
-app.use('/app/login', require('./src/rutas/SesionApp_ruta'));
+app.use('/app/login', require('./src/rutas/sesionApp_ruta.js'));
 
 
 // Ruta Web
-app.use('/web/login', require('./src/rutas/SesionApp_ruta'));
+app.use('/web/login', require('./src/rutas/sesionApp_ruta'));
 
 
 // Ruta Usuiario Web
