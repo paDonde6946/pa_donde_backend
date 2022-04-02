@@ -9,7 +9,7 @@ const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula, agregarVehiculoAdmin } = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
 const { traerTodosServicios, cambiarEstadoServicio } = require('../controladores/servicio_controlador');
-const { cantidadUsuarios, cantidadVehiculos, cantidadConductores } = require('../controladores/dashboard_controlador');
+const { cantidadUsuarios, cantidadVehiculos, cantidadConductores, cantidadServicios, conductoresMasServicios, cantidadCarrosMotos} = require('../controladores/dashboard_controlador');
 
 const router = Router();
 
@@ -112,6 +112,21 @@ router.get('/dashboard/estadisticas/cantidadConductores', [
     validarCampos,
     validarJWT
 ], cantidadConductores);
+
+router.get('/dashboard/estadisticas/cantidadServicios', [
+    validarCampos,
+    validarJWT
+], cantidadServicios);
+
+router.get('/dashboard/estadisticas/conductoresMasServicios', [
+    validarCampos,
+    validarJWT
+], conductoresMasServicios);
+
+router.get('/dashboard/estadisticas/cantidadCarrosMotos', [
+    validarCampos,
+    validarJWT
+], cantidadCarrosMotos);
 
 module.exports = router;
 
