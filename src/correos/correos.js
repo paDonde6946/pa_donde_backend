@@ -26,6 +26,8 @@ sendEmail = function(opcionesCorreo) {
 
 
 const enviarOlvidoContrasenia = (correo, clave) => {
+    log.info("Enviando correo a"+opcionesCorreo.to);
+
     var opcionesCorreo = {
         from: 'padonde6946@gmail.com',
         to: correo,
