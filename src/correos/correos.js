@@ -1,4 +1,6 @@
 var nodemailer = require('nodemailer');
+const log = require('../utils/logger/logger');
+
 // email sender 
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -12,12 +14,10 @@ sendEmail = function(opcionesCorreo) {
 
     transporter.sendMail(opcionesCorreo, function(error, info) {
         if (error) {
-            console.log(error);
-
+            log.error("Error al enviar el correo a "+opcionesCorreo.to, {}, {}, {}, error);
             return false;
-            log.error(req.uid, req.body, req.params, req.query, error);
         } else {
-            console.log("Email sent");
+            log.info("Correo enviado a "+opcionesCorreo.to);
             return true;
         }
     });

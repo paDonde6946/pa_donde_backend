@@ -13,7 +13,6 @@ iniciarFireBase();
 
 
 function envioNotificacion(pData, pMensaje, pTitulo, tokenReceptor) {
-    console.log("Entro aca");
     const mensaje = {
         token : tokenReceptor,
         data: pData,
