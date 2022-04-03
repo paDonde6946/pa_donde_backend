@@ -4,11 +4,12 @@ const { agregarMensaje, traerConversacion } = require('../controladores/mensaje_
 const { darUidConductor } = require('../controladores/servicio_controlador');
 const { envioNotificacion } = require('../controladores/notificaciones_push_controlador');
 const Usuario = require('../modelo/Usuario_modelo');
+const log = require('../utils/logger/logger');
 
 //Mensaje de sockets 
 io.on('connection', client => {
 
-    console.log("Cliente conectado");
+    log.info("Cliente conectado Socket");
     const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
     // Verificar autenticación
     if (!valido) { 
@@ -18,6 +19,7 @@ io.on('connection', client => {
     // Ingresar al usuario a una sala en particular
     // sala global, client.id 
     client.join(uid);
+    log.info("Cliente conectado Socket "+uid);
 
     // Se desconecta
     client.on('disconnect', () => {
