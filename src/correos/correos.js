@@ -3,12 +3,15 @@ const log = require('../utils/logger/logger');
 
 // email sender 
 var transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: 'smtp.gmail.com ',
-    port: 465,
+    host: "smtp-mail.outlook.com", // hostname
+    secureConnection: false, // TLS requires secureConnection to be false
+    port: 587, // port for secure SMTP
+    tls: {
+       ciphers:'SSLv3'
+    },
     auth: {
-        user: 'padonde6946@gmail.com',
-        pass: 'PaDonde6946%'
+        user: 'padonde6946@outlook.com',
+        pass: 'DondePa6946%'
     }
 });
 
@@ -31,7 +34,7 @@ const enviarOlvidoContrasenia = (correo, clave) => {
     log.info("Enviando correo a"+correo);
 
     var opcionesCorreo = {
-        from: 'padonde6946@gmail.com',
+        from: 'padonde6946@outlook.com',
         to: correo,
         subject: 'Recuperacion de contraseña',
         html: olvidoContrasenia(clave)
@@ -41,7 +44,7 @@ const enviarOlvidoContrasenia = (correo, clave) => {
 
 const enviarActivacionCuenta = (correo, link) => {
     var opcionesCorreo = {
-        from: 'padonde6946@gmail.com',
+        from: 'padonde6946@outlook.com',
         to: correo,
         subject: 'Activacion cuenta PaDonde',
         html: activacionCuenta(link)
