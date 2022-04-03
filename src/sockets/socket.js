@@ -23,6 +23,7 @@ io.on('connection', client => {
 
     // Se desconecta
     client.on('disconnect', () => {
+        log.info("Cliente desconectado Socket "+uid);
         console.log('Cliente desconectado');
     });
 
@@ -35,6 +36,8 @@ io.on('connection', client => {
      * servicio 
      */
     client.on('enviarMensaje', async(payload) => {
+        log.info("Socket enviarMensaje: "+uid);
+
         payload.de = uid;
         payload.para = (payload.para == '' || payload.para == undefined || payload.para == null ) ? await darUidConductor(payload.servicio) : payload.para;
         await agregarMensaje(payload);
@@ -54,6 +57,7 @@ io.on('connection', client => {
     });
 
     client.on('traerConversacion', async(payload) => {
+        log.info("Socket traerConversacion: "+uid);
         payload.de = uid;
         payload.para = (payload.para == '' || payload.para == undefined || payload.para == null ) ? await darUidConductor(payload.servicio) : payload.para;
         const conversacion = await traerConversacion(payload);
