@@ -3,7 +3,9 @@ const log = require('../utils/logger/logger');
 
 // email sender 
 var transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'smtp.gmail.com ',
+    secure: true,
+    port: 465,
     auth: {
         user: 'padonde6946@gmail.com',
         pass: 'PaDonde6946%'
