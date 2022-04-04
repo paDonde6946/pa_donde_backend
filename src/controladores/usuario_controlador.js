@@ -229,7 +229,7 @@ const cambiarContrasenia = async (req, res = response) => {
         }
         usuario.contrasenia = cifrarTexto(contrasenia);
         usuario.cambiarContrasenia = 0;
-        usuario.save();
+        await usuario.save();
         res.json({
             ok: true
         });
