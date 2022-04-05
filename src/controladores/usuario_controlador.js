@@ -460,7 +460,12 @@ const darServiciosCreados = async (req, res = response) => {
                         select: 'nombre'
                     },
                     match: { $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }
-                }).sort({ 'servicios.fechayhora': 1 });
+                }).populate({
+                    path: 'servicios',
+                    populate: {
+                        path: 'idVehiculo',
+                        select: 'placa'
+                    }}).sort({ 'servicios.fechayhora': 1 });
 
         let pasajeros = [];
 
@@ -485,7 +490,7 @@ const darServiciosPostulados = async (req, res = response) => {
     try {
         const uid = req.uid;
         const serviciosAux = await Servicio.find({ 'pasajeros.pasajero': uid, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
-            .populate('pasajeros.pasajero', 'nombre');
+            .populate('pasajeros.pasajero', 'nombre').populate('idVehiculo', 'placa');
         var servicios = [];
 
 
@@ -540,9 +545,9 @@ const darServiciosDisponibles = async (req, res = response) => {
         });
         let serviciosDisponibles = [];
         if (serviciosExcluidos.length == 0) {
-            serviciosDisponibles = await Servicio.find({ $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
+            serviciosDisponibles = await Servicio.find({ $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('idVehiculo', 'placa');
         } else {
-            serviciosDisponibles = await Servicio.find({ $nor: serviciosExcluidos, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } })
+            serviciosDisponibles = await Servicio.find({ $nor: serviciosExcluidos, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('idVehiculo', 'placa');
         }
         res.json({
             ok: true,
@@ -573,13 +578,18 @@ const darHistorial = async (req, res = response) => {
                         },
                         match: { estado: EstadoViaje.Finalizado }
                     }
-                ).sort({ 'servicios.fechayhora': -1 });
+                ).populate({
+                    path: 'servicios',
+                    populate: {
+                        path: 'idVehiculo',
+                        select: 'placa'
+                    }}).sort({ 'servicios.fechayhora': -1 });
 
         const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid,  estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } })
             .populate({
                 path: 'pasajeros.pasajero',
                 select: 'nombre'
-            });
+            }).populate('idVehiculo', 'placa');
 
         res.json({
             ok: true,
