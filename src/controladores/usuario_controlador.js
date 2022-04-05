@@ -575,16 +575,16 @@ const darHistorial = async (req, res = response) => {
                     }
                 ).sort({ 'servicios.fechayhora': -1 });
 
-        const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid, estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } })
+        const serviciosComoUsuario = await Servicio.find({ 'pasajeros.pasajero': uid,  estado: EstadoViaje.Finalizado }, null, { sort: { fechayhora: -1 } })
             .populate({
                 path: 'pasajeros.pasajero',
                 select: 'nombre'
             });
-        console.log(serviciosComoUsuario.servicios);
+
         res.json({
             ok: true,
             serviciosComoConductor: (serviciosComoConductor.servicios == undefined) ? [] : serviciosComoConductor.servicios,
-            serviciosComoUsuario: (serviciosComoUsuario.servicios == undefined) ? [] : serviciosComoUsuario.servicios
+            serviciosComoUsuario: (serviciosComoUsuario == undefined) ? [] : serviciosComoUsuario
         });
 
     } catch (error) {
