@@ -13,7 +13,7 @@ const agregarMensaje = async (payload) => {
 
 const traerConversacion = async (payload) => {
     try {
-        const conversacion = await Mensajes.find({ $or: [{para: payload.para, de: payload.de}, {para: payload.de, de: payload.para}] })
+        const conversacion = await Mensajes.find({ $or: [{para: payload.para, de: payload.de}, {para: payload.de, de: payload.para}] , servicio: payload.servicio})
         .select("de para servicio mensaje").sort({createdAt:-1});
         return conversacion;
     } catch (error) {
