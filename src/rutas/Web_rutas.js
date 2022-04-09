@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar_campos_middlewares');
 const { validarJWT } = require('../middlewares/validar_jwt_middlewares');
 
-const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula, agregarVehiculoAdmin } = require('../controladores/usuario_controlador');
+const { buscarUsuario, cambiarEstadoUsuario, traerTodosUsuarios, actualizarUsuario, renovarToken, agregarVehiculo, agregarServicio, buscarUsuarioCedula, agregarVehiculoAdmin, crearUsuario} = require('../controladores/usuario_controlador');
 const { traerVehciulos, cambiarEstadoVehciulo, actualizarVehciulo, buscarVehiculoPorPlaca } = require('../controladores/vehiculo_controlador');
 const { traerTodosServicios, cambiarEstadoServicio } = require('../controladores/servicio_controlador');
 const { cantidadUsuarios, cantidadVehiculos, cantidadConductores, cantidadServicios, conductoresMasServicios, cantidadCarrosMotos} = require('../controladores/dashboard_controlador');
@@ -18,6 +18,16 @@ const router = Router();
  * Post -> Agregar 
  * Put -> Actualizar
  */
+
+ router.put('/usuario/crearUsuario', [
+    check('nombre', 'El nombre es obligatorio y solo se acepta texo').isString().not().isEmpty(),
+    check('apellido', 'El apellido es obligatorio y solo se acepta texo').isString().not().isEmpty(),
+    check('celular', 'El celular es obligatorio').isNumeric().not().isEmpty(),
+    check('correo', 'El correo es obligatorio').isEmail().not().isEmpty().matches(/[a-z]*@unbosque.edu.co/),
+    check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
+    check('cedula', 'El cedula es obligatorio').not().isEmpty().isNumeric(),
+    validarCampos,
+], crearUsuario);
 
 
 router.get('/usuario/traerUsuario/:uid', [
