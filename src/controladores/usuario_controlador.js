@@ -545,9 +545,9 @@ const darServiciosDisponibles = async (req, res = response) => {
         });
         let serviciosDisponibles = [];
         if (serviciosExcluidos.length == 0) {
-            serviciosDisponibles = await Servicio.find({ $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('idVehiculo', 'placa');
+            serviciosDisponibles = await Servicio.find({ $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('pasajeros.pasajero', 'nombre').populate('idVehiculo', 'placa');
         } else {
-            serviciosDisponibles = await Servicio.find({ $nor: serviciosExcluidos, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('idVehiculo', 'placa');
+            serviciosDisponibles = await Servicio.find({ $nor: serviciosExcluidos, $or: [{ estado: EstadoViaje.Camino }, { estado: EstadoViaje.Esperando }] }, null, { sort: { fechayhora: 1 } }).populate('pasajeros.pasajero', 'nombre').populate('idVehiculo', 'placa');
         }
         res.json({
             ok: true,
