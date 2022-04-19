@@ -63,7 +63,7 @@ const buscarUsuario = async (req, res = response) => {
         const { uid } = req.params;
         const usuario = await Usuario.findById(uid);
 
-        if (!usuario) {
+        if (usuario == '') {
             return res.status(400).json({
                 ok: false,
                 msg: 'No existe el usuario'
