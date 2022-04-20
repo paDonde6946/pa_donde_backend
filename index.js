@@ -2,7 +2,8 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
 const log = require('./src/utils/logger/logger');
-
+var http = require('http');
+const Cors = requere('cors');
 
 //TODO AVERIGUAR PARA QUE SIRVE
 //{ path: 'ENV_FILENAME' }
@@ -22,8 +23,10 @@ app.use(express.json());
 // Lectura de archivos
 app.use(fileUpload());
 
+app.use(Cors());
+
 // Servidor de node
-const servidor = require('http').createServer(app);
+const servidor = http.createServer(app);
 
 // Servicio de socket
 module.exports.io = require('socket.io')(servidor);
@@ -52,7 +55,6 @@ app.use('/web', require('./src/rutas/Web_rutas'));
 
 // Ruta Usuiario Movil 
 app.use('/app', require('./src/rutas/App_ruta'));
-
 
 servidor.listen(process.env.PORT, (err) => {
     if (err) throw new Error(err);
