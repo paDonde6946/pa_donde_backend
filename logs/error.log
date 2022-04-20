@@ -1,0 +1,40 @@
+error: -----------------------------------------------------------------------------
+error: Fecha y hora: Tue Apr 19 2022 04:07:10 GMT+0000 (Coordinated Universal Time)
+error: UID: undefined
+error: BODY: {}
+error: PARAMS: {}
+error: QUERY: {}
+error: {"correo":{"msg":"El correo es obligatorio","param":"correo","location":"body"},"contrasenia":{"msg":"La clave es obligatoria","param":"contrasenia","location":"body"}}
+error: -----------------------------------------------------------------------------
+error: -----------------------------------------------------------------------------
+error: Fecha y hora: Tue Apr 19 2022 20:52:52 GMT+0000 (Coordinated Universal Time)
+error: UID: undefined
+error: BODY: {}
+error: PARAMS: {"correo":"j@d.co","contrasenia":"eee","tokenMensaje":"deo5saTzRES2YyxNQtpcAp:APA91bEAdLEym5OfLzsDB67ZD8xTMos64Yl5C8lBGUX4ZYzEwWEEdcrj5pqq5qqHHbNnzy3WUGJCAZjv72z8iluwEClLMPLWnUPh4cPYlkpnIUVcZ-7rRYvOlZBe2_Tp8fGR72nun1fG"}
+error: QUERY: {}
+error: {"correo":{"value":"j@d.co","msg":"El correo es obligatorio o no es permitido","param":"correo","location":"params"}}
+error: -----------------------------------------------------------------------------
+error: -----------------------------------------------------------------------------
+error: Fecha y hora: Tue Apr 19 2022 21:02:37 GMT+0000 (Coordinated Universal Time)
+error: UID: 625f231775f6968a09ed7289
+error: BODY: {"idServicio":"625ede1475f6968a09ed71ad"}
+error: PARAMS: {}
+error: QUERY: {}
+error: Lo sentimos no hay cupos.
+error: -----------------------------------------------------------------------------
+error: -----------------------------------------------------------------------------
+error: Fecha y hora: Tue Apr 19 2022 21:19:17 GMT+0000 (Coordinated Universal Time)
+error: UID: 625f227775f6968a09ed71eb
+error: BODY: {"nombreOrigen":"MEDISTETIC - CLAUDIA TORO M.D.","nombreDestino":"Codabas Norte","polylineRuta":"mtp~GdoqelC_GjIkg@e@{\\ib@lr@s|CgO{Rux@~EmiCid@gkC}AeiF_sCckCcRkgCmeAsnF}q@u|C{IerF`Z_uBqxA{|CwKomAyYk}HdLelH`jB{fH`\\qGxp@kx@~S","fechayhora":"2022-04-19T18:20:00.000+00:00","idVehiculo":"625f269a75f6968a09ed72d1","cantidadCupos":4,"idAuxilioEconomico":"61f1f9e5d41447b8ea79d2ea","distancia":"5904.493","duracion":"972.435","historialOrigen":[],"historialDestino":[{"id":"poi.77309424762","type":"Feature","place_type":["poi"],"relevance":1,"properties":{"foursquare":"4c926aee7088a1439349b943","landmark":true,"address":"Av Carrera 7","category":"farmers market, farmers, market","maki":""},"text_es":"Codabas Norte","place_name_es":"Codabas Norte, Av Carrera 7, Bogotá, 110141, Colombia","text":"Codabas Norte","place_name":"Codabas Norte, Av Carrera 7, Bogotá, 110141, Colombia","center":[-74.025867,4.757055],"geometry":{"coordinates":[-74.025867,4.757055],"type":"Point"},"context":[{"id":"postcode.548359832550400","text_es":"110141","text":"110141","wikidata":"","short_code":"","language_es":null,"language":null},{"id":"place.6089854572752850","text_es":"Bogotá","text":"Bogotá","wikidata":"Q2841","short_code":"CO-DC","language_es":"es","language":"es"},{"id":"country.12006018001646840","text_es":"Colombia","text":"Colombia","wikidata":"Q739","short_code":"co","language_es":"es","language":"es"}]}],"uid":null,"nombreConductor":null}
+error: PARAMS: {}
+error: QUERY: {}
+error: {"historialOrigen":{"value":[],"msg":"El historialOrigen es obligatorio","param":"historialOrigen","location":"body"}}
+error: -----------------------------------------------------------------------------
+error: -----------------------------------------------------------------------------
+error: Fecha y hora: Tue Apr 19 2022 21:19:31 GMT+0000 (Coordinated Universal Time)
+error: UID: 625f227775f6968a09ed71eb
+error: BODY: {"nombreOrigen":"MEDISTETIC - CLAUDIA TORO M.D.","nombreDestino":"Codabas Norte","polylineRuta":"mtp~GdoqelC_GjIkg@e@{\\ib@lr@s|CgO{Rux@~EmiCid@gkC}AeiF_sCckCcRkgCmeAsnF}q@u|C{IerF`Z_uBqxA{|CwKomAyYk}HdLelH`jB{fH`\\qGxp@kx@~S","fechayhora":"2022-04-19T18:20:00.000+00:00","idVehiculo":"625f269a75f6968a09ed72d1","cantidadCupos":4,"idAuxilioEconomico":"61f1f9e5d41447b8ea79d2ea","distancia":"5904.493","duracion":"972.435","historialOrigen":[],"historialDestino":[{"id":"poi.77309424762","type":"Feature","place_type":["poi"],"relevance":1,"properties":{"foursquare":"4c926aee7088a1439349b943","landmark":true,"address":"Av Carrera 7","category":"farmers market, farmers, market","maki":""},"text_es":"Codabas Norte","place_name_es":"Codabas Norte, Av Carrera 7, Bogotá, 110141, Colombia","text":"Codabas Norte","place_name":"Codabas Norte, Av Carrera 7, Bogotá, 110141, Colombia","center":[-74.025867,4.757055],"geometry":{"coordinates":[-74.025867,4.757055],"type":"Point"},"context":[{"id":"postcode.548359832550400","text_es":"110141","text":"110141","wikidata":"","short_code":"","language_es":null,"language":null},{"id":"place.6089854572752850","text_es":"Bogotá","text":"Bogotá","wikidata":"Q2841","short_code":"CO-DC","language_es":"es","language":"es"},{"id":"country.12006018001646840","text_es":"Colombia","text":"Colombia","wikidata":"Q739","short_code":"co","language_es":"es","language":"es"}]}],"uid":null,"nombreConductor":null}
+error: PARAMS: {}
+error: QUERY: {}
+error: {"historialOrigen":{"value":[],"msg":"El historialOrigen es obligatorio","param":"historialOrigen","location":"body"}}
+error: -----------------------------------------------------------------------------
