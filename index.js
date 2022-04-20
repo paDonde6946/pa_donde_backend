@@ -3,7 +3,7 @@ const fileUpload = require('express-fileupload');
 const path = require('path');
 const log = require('./src/utils/logger/logger');
 var http = require('http');
-const Cors = requere('cors');
+const Cors = require('cors');
 
 //TODO AVERIGUAR PARA QUE SIRVE
 //{ path: 'ENV_FILENAME' }

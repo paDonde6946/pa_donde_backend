@@ -36,7 +36,7 @@ const enviarOlvidoContrasenia = (correo, clave) => {
     var opcionesCorreo = {
         from: 'padonde6946@outlook.com',
         to: correo,
-        subject: 'Recuperacion de contraseña',
+        subject: 'Recuperación de contraseña',
         html: olvidoContrasenia(clave)
     };
     return sendEmail(opcionesCorreo);
@@ -46,7 +46,7 @@ const enviarActivacionCuenta = (correo, link) => {
     var opcionesCorreo = {
         from: 'padonde6946@outlook.com',
         to: correo,
-        subject: 'Activacion cuenta PaDonde',
+        subject: 'Activación cuenta PaDonde',
         html: activacionCuenta(link)
     };
     return sendEmail(opcionesCorreo);
