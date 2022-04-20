@@ -568,15 +568,14 @@ const darHistorial = async (req, res = response) => {
     try {
         const uid = req.uid;
         const serviciosComoConductor =
-            await Usuario.findById(uid, 'servicios').
+            await Usuario.findById(uid, 'servicios', {estado: EstadoViaje.Finalizado}).
                 populate(
                     {
                         path: 'servicios',
                         populate: {
                             path: 'pasajeros.pasajero',
                             select: 'nombre'
-                        },
-                        match: { estado: EstadoViaje.Finalizado }
+                        }
                     }
                 ).populate({
                     path: 'servicios',
