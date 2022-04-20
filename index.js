@@ -3,7 +3,7 @@ const fileUpload = require('express-fileupload');
 const path = require('path');
 const log = require('./src/utils/logger/logger');
 var http = require('http');
-const Cors = require('cors');
+var cors = require('cors')
 
 //TODO AVERIGUAR PARA QUE SIRVE
 //{ path: 'ENV_FILENAME' }
@@ -23,7 +23,13 @@ app.use(express.json());
 // Lectura de archivos
 app.use(fileUpload());
 
-app.use(Cors());
+const issue2options = {
+    origin: true,
+    credentials: true,
+    maxAge: 3600,
+    preflightContinue: true,
+  };
+app.use(cors(issue2options));
 
 // Servidor de node
 const servidor = http.createServer(app);
@@ -37,8 +43,8 @@ const publicoPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicoPath));
 
 // app.use( function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Credentials", "true");
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Credentials", "true");
 //     res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 //     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
 
