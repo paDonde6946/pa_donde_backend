@@ -36,11 +36,6 @@ require('./src/sockets/socket');
 const publicoPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicoPath));
 
-app.use( function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 // Rutas Movil 
 app.use('/app/login', require('./src/rutas/sesionApp_ruta.js'));
