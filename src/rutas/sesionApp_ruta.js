@@ -60,7 +60,6 @@ router.post('/olvidarContrasenia', [
 router.post('/cambiarContraseniaAdmin', [
     check('contrasenia', 'El contrasenia es obligatorio').not().isEmpty(),
     validarCampos,
-    validarJWT
 ], cambiarContraseniaAdmin);
 
 router.get('/activacionCuenta/:token',[
