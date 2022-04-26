@@ -4,7 +4,7 @@
     "description": "Proyecto de grado ",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jasmine",
         "start": "nodemon index.js",
         "start:dev": "nodemon index.js"
     },
@@ -29,5 +29,8 @@
         "path": "^0.12.7",
         "socket.io": "^2.3.1",
         "winston": "^3.4.0"
+    },
+    "devDependencies": {
+        "jasmine": "^4.1.0"
     }
 }

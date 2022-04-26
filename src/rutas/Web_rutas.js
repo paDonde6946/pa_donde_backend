@@ -32,25 +32,25 @@ const router = Router();
 
 router.get('/usuario/traerUsuario/:uid', [
     check('uid', 'El uid es obligatorio').not().isEmpty(),
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], buscarUsuario);
 
 router.get('/usuario/traerUsuarioXCedula/:cedula', [
     check('cedula', 'La cedula es obligatorio').not().isEmpty(),
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], buscarUsuarioCedula);
 
 router.post('/usuario/cambiarEstadoUsuario', [
     check('uid', 'El uid es obligatorio').not().isEmpty(),
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cambiarEstadoUsuario);
 
 router.get('/usuario/listaUsuarios', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], traerTodosUsuarios);
 
 router.post('/usuario/actualizarUsuario', [
@@ -59,8 +59,8 @@ router.post('/usuario/actualizarUsuario', [
     check('nombre', 'El nombre es obligatorio').notEmpty(),
     check('apellido', 'El apellido es obligatorio').notEmpty(),
     check('celular', 'El celular es obligatorio').notEmpty(),
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], actualizarUsuario);
 
 //  Ruta completa : /web/vehiculos/agregarVehiculo
@@ -72,70 +72,70 @@ router.post('/vehiculos/agregarVehiculo', [
     check('anio', 'El anio es obligatorio y no puede ser un numero').notEmpty().isNumeric(),
     check('modelo', 'El modelo es obligatorio').notEmpty().isString(),
     check('cedula', 'El cedula es obligatorio y no puede ser numero').notEmpty().isNumeric(),
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], agregarVehiculoAdmin);
 
 //  Ruta completa : /web/vehiculos/listarVehiculos
 router.get('/vehiculos/listarVehiculos', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], traerVehciulos);
 
 router.put('/vehiculos/cambiarEstado/:uid', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cambiarEstadoVehciulo);
 
 
 router.put('/vehiculos/actualizarVehiculo/:uid', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], actualizarVehciulo);
 
 router.get('/vehiculos/buscarVehiculo/:placa', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], buscarVehiculoPorPlaca)
 
 router.get('/servicio/listarServicio', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], traerTodosServicios);
 
 router.put('/servicio/cambiarEstado/:uid', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cambiarEstadoServicio);
 
 router.get('/dashboard/estadisticas/cantidadUsuarios', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cantidadUsuarios);
 
 router.get('/dashboard/estadisticas/cantidadVehiculos', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cantidadVehiculos);
 
 router.get('/dashboard/estadisticas/cantidadConductores', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cantidadConductores);
 
 router.get('/dashboard/estadisticas/cantidadServicios', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cantidadServicios);
 
 router.get('/dashboard/estadisticas/conductoresMasServicios', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], conductoresMasServicios);
 
 router.get('/dashboard/estadisticas/cantidadCarrosMotos', [
-    validarCampos,
-    validarJWT
+    validarCampos
+    //validarJWT
 ], cantidadCarrosMotos);
 
 module.exports = router;
