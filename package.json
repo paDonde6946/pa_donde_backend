@@ -4,7 +4,7 @@
     "description": "Proyecto de grado ",
     "main": "index.js",
     "scripts": {
-        "test": "jasmine",
+        "test": "nodemon spec/index.js",
         "start": "nodemon index.js",
         "start:dev": "nodemon index.js"
     },
@@ -31,6 +31,7 @@
         "winston": "^3.4.0"
     },
     "devDependencies": {
-        "jasmine": "^4.1.0"
+        "jasmine": "^4.0.2",
+        "jasmine-pretty-html-reporter": "^0.2.5"
     }
 }

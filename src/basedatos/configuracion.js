@@ -14,9 +14,11 @@ const dbConnection = async() => {
             useUnifiedTopology: true
         });
         log.info("db online");
+        return true;
 
     } catch (error) {
         console.error(error);
+        return false;
         // throw new Error('Eroor en la base de datos - Hable con el');
     }
 

@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="jasmineResults">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css">
+    <style>
+        .status {
+            width: 85px;
+            padding: 7px;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .failed .status {
+            background-color: rgb(255, 87, 34);
+        }
+
+        .passed .status {
+            background-color: rgb(76, 175, 80);
+        }
+
+        .pending .status {
+            background-color: rgb(255, 255, 0);
+        }
+
+
+        /* stack traces */
+        pre {
+            margin:0;
+        }
+
+        .stack.highlight {
+            background-color: yellow;
+        }
+
+    </style>
+</head>
+<body ng-controller="ResultsCtrl">
+
+<div ng-cloak layout="column">
+    <md-toolbar ng-class="{'md-warn': results.counts.failed}">
+        <div class="md-toolbar-tools">
+            <h2 flex md-truncate>Results <small ng-if="runTime"> - executed in {{runTime}} ms</small></h2>
+            <h6>
+                <span ng-if="results.counts.passed">Passed: {{results.counts.passed}}</span>
+                <br ng-if="results.counts.passed" />
+
+                <span ng-if="results.counts.pending">Pending: {{results.counts.pending}}</span>
+                <br ng-if="results.counts.pending" />
+
+                <span ng-if="results.counts.failed">Failed: {{results.counts.failed}}</span>
+            </h6>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+        <md-list>
+            <md-list-item ng-class="result.status" ng-repeat="result in results.sequence" ng-click="showDetail(result)">
+                <div layout="row" flex layout-padding>
+                    <div flex="none">
+                        <div class="status">{{result.status}}</div>
+                    </div>
+                    <div flex>
+                        <span>{{result.prefix}}</span><strong>{{result.description}}</strong>
+                        <div ng-if="result.pendingReason != ''">
+                            <small>{{result.pendingReason}}</small>
+                        </div>
+                        <div ng-repeat="failure in result.failedExpectations" ng-show="failure.hasSuspectLine">
+                            <small>
+                                <span>{{failure.message}}</span>
+                                <div ng-if="results.options.showSuspectLine">
+                                    <pre>{{failure.suspectLine}}</pre>
+                                </div>
+                            </small>
+                        </div>
+                    </div>
+                    <div flex="none" style="width: 100px">
+                        <small>{{result.duration}} ms</small>
+                    </div>
+                </div>
+                <md-divider inset></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.js"></script>
+
+<script>
+    angular.module('jasmineResults', ['ngMaterial']).config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('default').primaryPalette('green').accentPalette('yellow');
+    }).controller('ResultsCtrl', function ($scope, $mdDialog, results) {
+
+        var classes = {
+            'passed': 'md-primary',
+            'pending': 'md-accent',
+            'failed': 'md-warn'
+        };
+
+        $scope.showDetail = function (item) {
+            $scope.activeItem = item;
+            $mdDialog.show({
+                controller: function () {
+                },
+                scope: $scope.$new(false, $scope),
+                templateUrl: 'dialog.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: true
+            })
+        };
+
+        $scope.results = results;
+        $scope.runTime = new Date(results.timer.jasmineDone) - new Date(results.timer.jasmineStart);
+
+        $scope.getCssClass = function(item){
+            return classes[item.status];
+        };
+
+    }).constant('results', {
+    "options": {
+        "writeReportEachSpec": true,
+        "showSuspectLine": true,
+        "highlightSuspectLine": true,
+        "path": "D:\\PROYECTO GRADO\\pa_donde_backend\\spec\\results"
+    },
+    "timer": {
+        "jasmineStart": "2022-04-29T02:59:53.899Z",
+        "jasmineDone": "2022-04-29T02:59:56.177Z"
+    },
+    "counts": {
+        "passed": 57
+    },
+    "sequence": [
+        {
+            "id": "spec0",
+            "description": "Cifrar un texto",
+            "fullName": "Cifrado de texto funcional Cifrar un texto",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toEqual",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:53.968Z",
+            "prefix": "Cifrado de texto funcional "
+        },
+        {
+            "id": "spec1",
+            "description": "Comparar texto",
+            "fullName": "Cifrado de texto funcional Comparar texto",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                },
+                {
+                    "matcherName": "toBeFalse",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:54.030Z",
+            "prefix": "Cifrado de texto funcional "
+        },
+        {
+            "id": "spec2",
+            "description": "JWT Generar Token",
+            "fullName": "JWT funcional JWT Generar Token",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeNull",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:54.041Z",
+            "prefix": "JWT funcional "
+        },
+        {
+            "id": "spec3",
+            "description": "Conexión a la base de datos",
+            "fullName": "Coneccion a la bd funcional Conexión a la base de datos",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.067Z",
+            "prefix": "Coneccion a la bd funcional "
+        },
+        {
+            "id": "spec4",
+            "description": "cargarArchivo",
+            "fullName": "Funcionalidades de Auxilio Economico cargarArchivo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.070Z",
+            "prefix": "Funcionalidades de Auxilio Economico "
+        },
+        {
+            "id": "spec5",
+            "description": "enviarImagen",
+            "fullName": "Funcionalidades de Auxilio Economico enviarImagen",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.072Z",
+            "prefix": "Funcionalidades de Auxilio Economico "
+        },
+        {
+            "id": "spec6",
+            "description": "Listar Auxilio Economico",
+            "fullName": "Funcionalidades de Auxilio Economico Listar Auxilio Economico",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.079Z",
+            "prefix": "Funcionalidades de Auxilio Economico "
+        },
+        {
+            "id": "spec7",
+            "description": "Cantidad Usuarios",
+            "fullName": "Funcionalidades de Dashboard Cantidad Usuarios",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.082Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec8",
+            "description": "Cantidad Vehiculos",
+            "fullName": "Funcionalidades de Dashboard Cantidad Vehiculos",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.093Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec9",
+            "description": "Cantidad Conductores",
+            "fullName": "Funcionalidades de Dashboard Cantidad Conductores",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.094Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec10",
+            "description": "Cantidad Servicios",
+            "fullName": "Funcionalidades de Dashboard Cantidad Servicios",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.095Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec11",
+            "description": "Conductores Mas Servicios",
+            "fullName": "Funcionalidades de Dashboard Conductores Mas Servicios",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.108Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec12",
+            "description": "Cantidad Carros Motos",
+            "fullName": "Funcionalidades de Dashboard Cantidad Carros Motos",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.109Z",
+            "prefix": "Funcionalidades de Dashboard "
+        },
+        {
+            "id": "spec13",
+            "description": "Login Usuario",
+            "fullName": "Funcionalidades de Login Login Usuario",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.124Z",
+            "prefix": "Funcionalidades de Login "
+        },
+        {
+            "id": "spec14",
+            "description": "Login Admin",
+            "fullName": "Funcionalidades de Login Login Admin",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.125Z",
+            "prefix": "Funcionalidades de Login "
+        },
+        {
+            "id": "spec15",
+            "description": "Olvidar Contrasenia",
+            "fullName": "Funcionalidades de Login Olvidar Contrasenia",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.125Z",
+            "prefix": "Funcionalidades de Login "
+        },
+        {
+            "id": "spec16",
+            "description": "PreRegistro",
+            "fullName": "Funcionalidades de Login PreRegistro",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.126Z",
+            "prefix": "Funcionalidades de Login "
+        },
+        {
+            "id": "spec17",
+            "description": "Crear Usuario PosRegistro",
+            "fullName": "Funcionalidades de Login Crear Usuario PosRegistro",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.139Z",
+            "prefix": "Funcionalidades de Login "
+        },
+        {
+            "id": "spec18",
+            "description": "Agregar Mensaje",
+            "fullName": "Funcionalidades de Mensaje Agregar Mensaje",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.141Z",
+            "prefix": "Funcionalidades de Mensaje "
+        },
+        {
+            "id": "spec19",
+            "description": "Traer Conversacion",
+            "fullName": "Funcionalidades de Mensaje Traer Conversacion",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.154Z",
+            "prefix": "Funcionalidades de Mensaje "
+        },
+        {
+            "id": "spec20",
+            "description": "Envio Notificaciones Vehiculo",
+            "fullName": "Funcionalidades de Notificaciones Envio Notificaciones Vehiculo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.156Z",
+            "prefix": "Funcionalidades de Notificaciones "
+        },
+        {
+            "id": "spec21",
+            "description": "Crear Servicio",
+            "fullName": "Servicio funcional Crear Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.161Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec22",
+            "description": "Editar Servicio",
+            "fullName": "Servicio funcional Editar Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.163Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec23",
+            "description": "Agregar Cupo",
+            "fullName": "Servicio funcional Agregar Cupo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.163Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec24",
+            "description": "Cancelar Cupo",
+            "fullName": "Servicio funcional Cancelar Cupo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.170Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec25",
+            "description": "Traer Servicio",
+            "fullName": "Servicio funcional Traer Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.171Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec26",
+            "description": "Cambiar Servicio",
+            "fullName": "Servicio funcional Cambiar Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.172Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec27",
+            "description": "Editar Servicio",
+            "fullName": "Servicio funcional Editar Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.185Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec28",
+            "description": "Eliminar Servicio",
+            "fullName": "Servicio funcional Eliminar Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.188Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec29",
+            "description": "Dar uid conductor",
+            "fullName": "Servicio funcional Dar uid conductor",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.190Z",
+            "prefix": "Servicio funcional "
+        },
+        {
+            "id": "spec30",
+            "description": "Crear Usuario",
+            "fullName": "Funcionalidades de Vehiculo Crear Usuario",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.202Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec31",
+            "description": "Buscar Usuario",
+            "fullName": "Funcionalidades de Vehiculo Buscar Usuario",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.203Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec32",
+            "description": "Traer todos los usuarios",
+            "fullName": "Funcionalidades de Vehiculo Traer todos los usuarios",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.204Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec33",
+            "description": "Actualizar Usuario",
+            "fullName": "Funcionalidades de Vehiculo Actualizar Usuario",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.216Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec34",
+            "description": "Cambiar estado Usuario",
+            "fullName": "Funcionalidades de Vehiculo Cambiar estado Usuario",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.217Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec35",
+            "description": "Renovar Token",
+            "fullName": "Funcionalidades de Vehiculo Renovar Token",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.219Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec36",
+            "description": "Cambiar Contraseña",
+            "fullName": "Funcionalidades de Vehiculo Cambiar Contraseña",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.231Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec37",
+            "description": "Agregar vehiculo",
+            "fullName": "Funcionalidades de Vehiculo Agregar vehiculo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.232Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec38",
+            "description": "Cambiar contraseña admin",
+            "fullName": "Funcionalidades de Vehiculo Cambiar contraseña admin",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.233Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec39",
+            "description": "Agregar servicio",
+            "fullName": "Funcionalidades de Vehiculo Agregar servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.247Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec40",
+            "description": "Listar vehiculos por uid",
+            "fullName": "Funcionalidades de Vehiculo Listar vehiculos por uid",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.248Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec41",
+            "description": "Separar cupo",
+            "fullName": "Funcionalidades de Vehiculo Separar cupo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.249Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec42",
+            "description": "Dar Servicios Creados",
+            "fullName": "Funcionalidades de Vehiculo Dar Servicios Creados",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.250Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec43",
+            "description": "Dar servicios Postulados",
+            "fullName": "Funcionalidades de Vehiculo Dar servicios Postulados",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.262Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec44",
+            "description": "Dar Servicios Disponibles",
+            "fullName": "Funcionalidades de Vehiculo Dar Servicios Disponibles",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.263Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec45",
+            "description": "Dar Historial",
+            "fullName": "Funcionalidades de Vehiculo Dar Historial",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.264Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec46",
+            "description": "Des postularse",
+            "fullName": "Funcionalidades de Vehiculo Des postularse",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.267Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec47",
+            "description": "Editar Servicio",
+            "fullName": "Funcionalidades de Vehiculo Editar Servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.268Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec48",
+            "description": "Eliminar servicio",
+            "fullName": "Funcionalidades de Vehiculo Eliminar servicio",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.269Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec49",
+            "description": "Calificar Pasajero",
+            "fullName": "Funcionalidades de Vehiculo Calificar Pasajero",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.277Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec50",
+            "description": "Calificar Conductor",
+            "fullName": "Funcionalidades de Vehiculo Calificar Conductor",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.280Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec51",
+            "description": "Finalzizar Servico",
+            "fullName": "Funcionalidades de Vehiculo Finalzizar Servico",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.281Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec52",
+            "description": "Iniciar Servios",
+            "fullName": "Funcionalidades de Vehiculo Iniciar Servios",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.282Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec53",
+            "description": "Buscar Usuario Cedula",
+            "fullName": "Funcionalidades de Vehiculo Buscar Usuario Cedula",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.293Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec54",
+            "description": "Agregar Vehiculo Admin",
+            "fullName": "Funcionalidades de Vehiculo Agregar Vehiculo Admin",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.294Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec55",
+            "description": "Buscar Vehiculo",
+            "fullName": "Funcionalidades de Vehiculo Buscar Vehiculo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:55.309Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        },
+        {
+            "id": "spec56",
+            "description": "Cambiar estado Vehiculo",
+            "fullName": "Funcionalidades de Vehiculo Cambiar estado Vehiculo",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBeTrue",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "duration": null,
+            "properties": null,
+            "debugLogs": null,
+            "status": "passed",
+            "stoped": "2022-04-29T02:59:56.172Z",
+            "prefix": "Funcionalidades de Vehiculo "
+        }
+    ]
+});
+</script>
+
+<script type="text/ng-template" id="dialog.html">
+    <md-dialog aria-label="" flex="90">
+        <md-toolbar ng-class="getCssClass(activeItem)">
+            <div layout="row" layout-padding class="md-toolbar-tools">
+                <div flex="none">
+                    <h1>Test Information:</h1>
+                </div>
+                <div flex>
+                    <small>
+                        <span>{{ activeItem.prefix }}</span>
+                        <strong>{{ activeItem.description }}</strong>
+                    </small>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <md-subheader ng-if="activeItem.failedExpectations.length > 0">Stack Traces</md-subheader>
+            <md-content>
+                <div flex layout="column" layout-padding ng-repeat="failure in activeItem.failedExpectations">
+                    <div flex>
+                        <p>{{failure.message}}</p>
+                        <small>
+                            <pre class="stack" ng-class="{'highlight': (results.options.highlightSuspectLine && line === failure.suspectLine) }" ng-repeat="line in failure.stack.split('\n')">{{line}}</pre>
+                        </small>
+                    </div>
+                </div>
+            </md-content>
+            <md-subheader ng-if="activeItem.passedExpectations.length > 0">Passed Expectations</md-subheader>
+            <pre ng-repeat="pass in activeItem.passedExpectations">{{pass | json}}</pre>
+        </md-dialog-content>
+    </md-dialog>
+</script>
+
+</body>
+</html>
